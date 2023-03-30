@@ -1,7 +1,18 @@
-import { useState } from 'react'
+import React,{ useState } from 'react'
 import Link from 'next/link'
 import Router from 'next/router.js'
 import Icon from '@mui/material/Icon';
+//Mui
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Input from '@mui/material/Input';
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //import { faTv, faCheck, faTimes, faAngleLeft, faUsers } from '@fortawesome/free-solid-svg-icons'
 
@@ -12,6 +23,8 @@ import { signIn } from "next-auth/react"
 // i18next
 import { useTranslation } from 'react-i18next'
 
+import Button from '@mui/material/Button';
+
 
 import Frame from '../components/Frame'
 //import { display } from '../stores'
@@ -21,6 +34,7 @@ function Login()  {
   const [username,setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [alert, setAlert] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
   const { t } = useTranslation()
 
 /**
@@ -34,6 +48,13 @@ function Login()  {
     display.setId(displayId)
   }
 */
+
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
   const performLogin = () => {
     const { username, password } = this.state
     //const { displayId } = this.props
@@ -88,7 +109,7 @@ function Login()  {
               </span>
             </div>
           )}
-          <label htmlFor='username'>{t('login.username.name')}</label>
+          <TextField id="outlined-basic" label={t('login.username.name')} variant="outlined" />
           <input
             type='text'
             className='username'
@@ -96,7 +117,28 @@ function Login()  {
             placeholder= {t('login.username.placeholder')}
             onChange={usernameChangeHandler}
           />
-          <label htmlFor='password'>{t('login.password.name')}</label>
+
+          <FormControl variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+          />
+        </FormControl>
+          <TextField id="outlined-basic" label={t('login.password.name')} variant="outlined" />
           <input
             type='password'
             className='password'
@@ -104,7 +146,7 @@ function Login()  {
             placeholder= {t('login.password.placeholder')}
             onChange={passwordChangeHandler}
           />
-          <button>{t('login.submit')}</button>
+          <Button variant="contained">{t('login.submit')}</Button>
         </form>
         <Link href='/join'>
           <span className='join'>
