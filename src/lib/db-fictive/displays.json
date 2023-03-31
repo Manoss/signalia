@@ -1,0 +1,29 @@
+[{
+    "_id": {
+      "$oid": "63fe1510493ec27e2418074c"
+    },
+    "layout": "spaced",
+    "widgets": [
+      {
+        "$oid": "63fe1f6d0ec17d9704c48d50"
+      },
+      {
+        "$oid": "640210a4be6f8ede55b3c092"
+      },
+      {
+        "$oid": "6405a9d5f8db32bd73ca9dba"
+      },
+      {
+        "$oid": "640b2ed69b8a097b82defbbd"
+      },
+      {
+        "$oid": "6421a9367cf4b7782e3971a0"
+      }
+    ],
+    "name": "Maison Accueil",
+    "statusBar": [
+      "date_TFuo8HOfO",
+      "spacer_dqjssq293h",
+      "time__qv5YEH5m4"
+    ]
+  }]

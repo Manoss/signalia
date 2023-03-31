@@ -56,19 +56,19 @@ function Login()  {
   };
   const performLogin = () => {
     console.log('performLogin username : ', username, ' Password : ', password)
-    /**
+    
     signIn("credentials", { redirect: false,username:username, password:password})
       .then(({ok,url, error, status }) => {
         console.log('Error : ',error, 'OK : ', ok, 'URL : ',url, ' Status : ', status)
       if(ok) {
         setAlert({alert:'success'})
-        Router.push('/screens')
+        Router.push('/admin/screens')
       }else{
         console.log(error)
         setAlert({ alert: 'error' })
         Router.push('/login')
     }
-    })*/
+    })
   }
 
   const usernameChangeHandler = event => {
