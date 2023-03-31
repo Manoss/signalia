@@ -2,6 +2,7 @@ import React,{ useState } from 'react'
 import Link from 'next/link'
 import Router from 'next/router.js'
 import Icon from '@mui/material/Icon';
+import Box from '@mui/material/Box';
 //Mui
 import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -13,18 +14,16 @@ import InputLabel from '@mui/material/InputLabel';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Input from '@mui/material/Input';
-//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-//import { faTv, faCheck, faTimes, faAngleLeft, faUsers } from '@fortawesome/free-solid-svg-icons'
-
-//import { view } from '@risingstack/react-easy-state'
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
 
 import { signIn } from "next-auth/react"
 
 // i18next
 import { useTranslation } from 'react-i18next'
-
-import Button from '@mui/material/Button';
-
 
 import Frame from '../components/Frame'
 //import { display } from '../stores'
@@ -56,9 +55,8 @@ function Login()  {
     event.preventDefault();
   };
   const performLogin = () => {
-    const { username, password } = this.state
-    //const { displayId } = this.props
-
+    console.log('performLogin username : ', username, ' Password : ', password)
+    /**
     signIn("credentials", { redirect: false,username:username, password:password})
       .then(({ok,url, error, status }) => {
         console.log('Error : ',error, 'OK : ', ok, 'URL : ',url, ' Status : ', status)
@@ -70,7 +68,7 @@ function Login()  {
         setAlert({ alert: 'error' })
         Router.push('/login')
     }
-    })
+    })*/
   }
 
   const usernameChangeHandler = event => {
@@ -82,8 +80,13 @@ function Login()  {
   }
   return (
     
-
-      <div className='formContainer'>
+    <Box sx={{ '& .MuiTextField-root': { mb: 5},'& button':{mt:2}, p: 2, border: '1px dashed grey'}}
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    > 
+      <Card sx={{ maxWidth: 'sm' }}>
+        <CardContent>
         <div className='logo'>
           <div className='icon'>
             <Icon fontSize="small">tv</Icon>
@@ -92,72 +95,70 @@ function Login()  {
         <div className='title'>
             <h1>{t('login.title')}</h1>
         </div>
-        <form
-          className='form'
-          onSubmit={event => {
-            event.preventDefault()
-            performLogin()
-            return false
-          }}
-        >
-          {alert && (
-            <div className={`alert-${alert}`}>
-              <span className={'alert-text'}>
-                {alert == 'success'
-                  ? t('login.alert.success')
-                  : t('login.alert.error')}
-              </span>
-            </div>
-          )}
-          <TextField id="outlined-basic" label={t('login.username.name')} variant="outlined" />
-          <input
-            type='text'
-            className='username'
-            id='username'
-            placeholder= {t('login.username.placeholder')}
-            onChange={usernameChangeHandler}
-          />
-
-          <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-          />
-        </FormControl>
-          <TextField id="outlined-basic" label={t('login.password.name')} variant="outlined" />
-          <input
-            type='password'
-            className='password'
-            id='password'
-            placeholder= {t('login.password.placeholder')}
-            onChange={passwordChangeHandler}
-          />
-          <Button variant="contained">{t('login.submit')}</Button>
-        </form>
-        <Link href='/join'>
-          <span className='join'>
-            {t('login.join')}
-          </span>
-        </Link>
-        <Link href='/'>
-          <span className='back'>
-            {t('login.back')}
-          </span>
-        </Link>
+          <form
+            className='form'
+            onSubmit={event => {
+              event.preventDefault()
+              performLogin()
+              return false
+            }}
+          >
+            {alert && (
+              <div className={`alert-${alert}`}>
+                <span className={'alert-text'}>
+                  {alert == 'success'
+                    ? t('login.alert.success')
+                    : t('login.alert.error')}
+                </span>
+              </div>
+            )}
+            <TextField
+              required 
+              id="outlined-basic" 
+              label={t('login.username.name')} 
+              variant="outlined"
+              placeholder= {t('login.password.placeholder')}
+              onChange={usernameChangeHandler}
+              />
+            <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+            <OutlinedInput
+              required
+              id="outlined-adornment-password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder= {t('login.username.placeholder')}
+              onChange={passwordChangeHandler}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+            />
+          </FormControl>
+            
+            <Button type='submit' variant="contained">{t('login.submit')}</Button>
+          </form>
+        </CardContent>
+        <CardActions>
+          <Link href='/register'>
+            <span className='join'>
+              {t('login.join')}
+            </span>
+          </Link>
+          <Link href='/'>
+            <span className='back'>
+              {t('login.back')}
+            </span>
+          </Link>
+        </CardActions>
 
       <style jsx>
         {`
@@ -168,7 +169,6 @@ function Login()  {
             margin: 0px;
           }
           .logo {
-            display: flex;
             flex-direction: row;
             margin-top: 20px;
             margin-bottom: 20px;
@@ -191,7 +191,6 @@ function Login()  {
             text-align: center
           }
           .form {
-            background: white;
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -204,43 +203,7 @@ function Login()  {
             display: flex;
             flex-direction: column;
           }
-          .form input[type='text'],
-          .form input[type='password'] {
-            outline: none;
-            background: #ededed;
-            border-radius: 8px;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 400;
-            font-size: 16px;
-            color: #928f8f;
-            border: none;
-            padding: 8px;
-            height: 32px;
-            min-width: 256px;
-            vertical-align: middle;
-            -webkit-appearance: none;
-            margin-bottom: 16px;
-          }
-          .form button {
-            outline: none;
-            background: #7bc043;
-            border-radius: 8px;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 600;
-            font-size: 18px;
-            color: #ffffff;
-            text-align: center;
-            border: none;
-            padding: 4px;
-            height: 48px;
-            vertical-align: middle;
-            padding-left: 16px;
-            padding-right: 16px;
-            -webkit-appearance: none;
-          }
-          .form label {
-            padding-bottom: 16px;
-          }
+          
           .back {
             display: inline-block;
             margin: 16px;
@@ -281,7 +244,8 @@ function Login()  {
           }
         `}
       </style>
-    </div>
+    </Card>
+  </Box>
   )
 }
 
