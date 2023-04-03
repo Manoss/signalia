@@ -5,9 +5,10 @@
  */
 
 import React, { Component } from 'react'
+/**
 import { config } from '@fortawesome/fontawesome-svg-core'
-
 config.autoAddCss = false
+*/
 
 const DEFAULT_COLOR = '#2d3436'
 const DEFAULT_FIT = 'contain'

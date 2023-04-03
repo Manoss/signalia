@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Form, Input, InlineInputGroup, Button } from '../../../components/Form'
+//import { Form, Input, InlineInputGroup, Button } from '../../../components/Form'
 
 import ListContent from './ListContent'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 class ListOptions extends Component {
   constructor(props) {

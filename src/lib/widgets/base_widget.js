@@ -1,5 +1,5 @@
-import EmptyWidget from '../components/Widgets/EmptyWidget'
-import EmptyWidgetOptions from '../components/Widgets/EmptyWidgetOptions'
+import EmptyWidget from '../../components/Widgets/EmptyWidget'
+import EmptyWidgetOptions from '../../components/Widgets/EmptyWidgetOptions'
 
 const REQUIRED_DEF_FIELDS = ['name', 'version', 'icon']
 

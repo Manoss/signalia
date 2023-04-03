@@ -3,11 +3,11 @@
  */
 
 import React, { Component } from 'react'
-import { config } from '@fortawesome/fontawesome-svg-core'
+//import { config } from '@fortawesome/fontawesome-svg-core'
 
-import AutoScroll from '../../../components/AutoScroll'
+import AutoScroll from '../../../../components/AutoScroll'
 
-config.autoAddCss = false
+//config.autoAddCss = false
 
 const DEFAULT_COLOR = '#463215'
 const DEFAULT_TEXT_COLOR = '#ffffff'

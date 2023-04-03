@@ -5,17 +5,18 @@
  */
 
 import React, { Component } from 'react'
-import { library, config } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import AutoScroll from '../../../components/AutoScroll'
+//import { library, config } from '@fortawesome/fontawesome-svg-core'
+//import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+//import AutoScroll from '../../../components/AutoScroll'
+import Icon from '@mui/material/Icon';
 
-import { fas } from '@fortawesome/free-solid-svg-icons'
-import { fab } from '@fortawesome/free-brands-svg-icons'
-
+//import { fas } from '@fortawesome/free-solid-svg-icons'
+//import { fab } from '@fortawesome/free-brands-svg-icons'
+/**
 config.autoAddCss = false
 library.add(fas)
 library.add(fab)
-
+*/
 const DEFAULT_COLOR = '#708090'
 const DEFAULT_TEXT_COLOR = '#ffffff'
 const DEFAULT_ACCENT_COLOR = '#EDC951'
@@ -37,10 +38,11 @@ class AnnouncementContent extends Component {
       <div className='announce'>
         <div className='title'>
           <div className='icon'>
-            <FontAwesomeIcon icon={'exclamation-triangle'} size={'xl'} color={accentColor} />
+          <Icon fontSize="small">warning</Icon>
           </div>
           <span>Announcement</span>
         </div>
+        {/**
         <AutoScroll style={{ display: 'block' }}>
           <div className='text'>
             {text.split('\n').map(line => (
@@ -48,6 +50,7 @@ class AnnouncementContent extends Component {
             ))}
           </div>
         </AutoScroll>
+         */}
         <style jsx>
           {`
             .announce {

@@ -1,35 +1,40 @@
-/**
+
 import widgetList from './widget_list'
-import Slideshow from './slideshow'
+//import Slideshow from './slideshow'
 import List from './list'
 import Image from './image'
 import Congrats from './congrats'
-import Weather from './weather'
-import YouTube from './youtube'
+//import Weather from './weather'
+//import YouTube from './youtube'
 import Announcement from './announcement'
-import Web from './web'
-*/
+//import Web from './web'
+
 const widgets = {}
-/** 
+
 for (const widget of widgetList) {
   
   switch (widget) {
+    /**
     case 'slideshow':
       widgets[widget] = new Slideshow()
       break;
-
+    
     case 'weather':
       widgets[widget] = new Weather()
       break;
+    */
     case 'congrats':
       widgets[widget] = new Congrats()
       break;
+    /** 
     case 'youtube':
       widgets[widget] = new YouTube()
       break;
+    
     case 'web':
       widgets[widget] = new Web()
       break;
+    */
     case 'image':
       widgets[widget] = new Image()
       break;
@@ -42,6 +47,6 @@ for (const widget of widgetList) {
       
   }
 }
-*/
+
 
 module.exports = widgets

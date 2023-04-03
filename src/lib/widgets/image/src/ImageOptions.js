@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { Form, Input, InlineInputGroup } from '../../../components/Form'
-import { standaloneUpload } from '../../../actions/slide'
+//import { Form, Input, InlineInputGroup } from '../../../components/Form'
+//import { standaloneUpload } from '../../../actions/slide'
 
 class ImageOptions extends Component {
   constructor(props) {

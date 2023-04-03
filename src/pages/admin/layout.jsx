@@ -27,10 +27,11 @@ import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router.js'
 
 //import { display } from '../stores'
-import displays from '../../lib/db-fictive/displays'
+import displaysDB from '../../lib/db-fictive/displays'
+import widgetsDB from '../../lib/db-fictive/widgets'
 
 import Icon from '@mui/material/Icon';
-import BasicMenu from '@/components/menu'
+import BasicMenu from '@/components/Menu'
 
 import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
 
@@ -46,6 +47,7 @@ function Layout(props) {
   const loggedIn = Session.status ==='authenticated'
   
   React.useEffect(() => {
+    setWidgets(widgetsDB)
     /**
     async function fetchData() {
       setStatusBarElement(await StatusBarElementTypes)
@@ -65,7 +67,7 @@ function Layout(props) {
     h: widget.h || 1
   }))
 
-  const display = displays[0]
+  const display = displaysDB[0]
 /** TODO : React.useEffect()
   componentDidMount() {
     //const { displayId } = this.props
@@ -82,29 +84,34 @@ function Layout(props) {
   }
 */
   const refresh = async () => {
-    const widgets = null //await getWidgets(display.id)
-    setWidgets({widgets})
+    const widgets = widgetsDB //await getWidgets(display.id)
+    console.debug('refresh')
+    setWidgets(widgets)
   }
 
   const addWidget = async type => {
-    const widgetDefinition = null //Widgets[type]
-    const result = await addWidget(display.id, type, widgetDefinition && widgetDefinition.defaultData)
+    const widgetDefinition = Widgets[type]
+    //const result = await addWidget(display.id, type, widgetDefinition && widgetDefinition.defaultData)
+    const result = widgetDefinition
+    console.log('addWidget : ', result)
     return refresh(result)
   }
 
   const deleteWidget = async id => {
-    const result = await deleteWidget(id)
+    const result = id //await deleteWidget(id)
     return refresh(result)
   }
 
   const onLayoutChange = layout => {
     for (const widget of layout) {
+      console.log('on LayoutChange : ', widget)
+      /** 
       updateWidget(widget.i, {
         x: widget.x,
         y: widget.y,
         w: widget.w,
         h: widget.h
-      })
+      })*/
     }
   }
 
@@ -151,19 +158,6 @@ function Layout(props) {
           }))}>
 
         </BasicMenu>
-        {/** 
-        <DropdownButton
-          icon='plus'
-          text={t('layout.settings.item')}
-          onSelect={display}//onSelect={display.addStatusBarItem}
-          /** 
-          choices={Object.keys(StatusBarElementTypes).map(statusBarEl => ({
-            key: statusBarEl,
-            name: StatusBarElementTypes[statusBarEl].name,
-            icon: StatusBarElementTypes[statusBarEl].icon
-          }))}
-        />
-      */}
       </div>
       <div className='statusbar'>
         {display && display.statusBar && (    

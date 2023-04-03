@@ -7,7 +7,7 @@ module.exports = class Announcement extends BaseWidget {
     super({
       name: 'Announcement',
       version: '0.1',
-      icon: 'exclamation-triangle',
+      icon: 'campaign',
       defaultData: {
         text: '',
         color: '#708090',

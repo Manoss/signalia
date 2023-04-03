@@ -23,14 +23,16 @@ library.add(faCloudSun)
 library.add(faCalendar)
 */
 import Widgets from '../../lib/widgets'
-//import WidgetEditDialog from './WidgetEditDialog'
+import WidgetEditDialog from './WidgetEditDialog'
 
 function EditableWidget(props) {
   const dialog = React.useRef()
+  console.debug('props : ', props)
 
 
   const open = e => {
     if (e) e.stopPropagation()
+    console.log('Open : ', dialog.current, ' e ', e)
     dialog && dialog.current.open()
   }
 
@@ -41,16 +43,16 @@ function EditableWidget(props) {
   }
 
 //
-  const { type = 'slideshow', id, layout = 'spaced' } = this.props
+  const { type = 'slideshow', id, layout = 'spaced' } = props
   const widget = Widgets[type] || {}
   return (
     <div className={'widget'}>
       <div className={'controls'}>
-        <div className={'edit'} onClick={this.open}>
-          <Icon fontSize="small">setting</Icon>
+        <div className={'edit'} onClick={open}>
+          <Icon fontSize="small">settings</Icon>
         </div>
-        <div className={'delete'} onClick={this.deleteClicked}>
-          <Icon fontSize="small">schedule</Icon>
+        <div className={'delete'} onClick={deleteClicked}>
+          <Icon fontSize="small">clear</Icon>
         </div>
       </div>
       <div className={'info'}>
@@ -59,9 +61,7 @@ function EditableWidget(props) {
         </div>
         <span className={'type'}>{widget.name || 'Broken Widget'}</span>
       </div>
-      {/**
       <WidgetEditDialog ref={dialog} OptionsComponent={widget.Options} id={id} />
-      */}
       <style jsx>
         {`
           .widget {

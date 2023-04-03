@@ -1,7 +1,7 @@
 import React from 'react'
 import Dialog from '../Dialog'
-import { Form, Button, ButtonGroup } from '../Form'
-import { getWidget, updateWidget } from '../../actions/widgets'
+//import { Form, Button, ButtonGroup } from '../Form'
+//import { getWidget, updateWidget } from '../../actions/widgets'
 
 class WidgetEditDialog extends React.Component {
   constructor() {
@@ -12,6 +12,7 @@ class WidgetEditDialog extends React.Component {
   }
 
   open = e => {
+    console.debug('Open - e : ', e)
     if (e) e.stopPropagation()
     this.dialog && this.dialog.current && this.dialog.current.open()
   }
@@ -39,19 +40,22 @@ class WidgetEditDialog extends React.Component {
 
   componentDidMount() {
     const { id } = this.props
-    getWidget(id).then(({ data }) => this.setState({ data }))
+    //getWidget(id).then(({ data }) => this.setState({ data }))
   }
 
   render() {
-    const { OptionsComponent = Form } = this.props
+    //const { OptionsComponent = Form } = this.props
     const { data } = this.state
     return (
       <Dialog ref={this.dialog}>
+        {/**
         <OptionsComponent data={data} onChange={this.handleChange} />
+    
         <ButtonGroup style={{ marginTop: 20 }}>
           <Button text={'Save'} color={'#8bc34a'} onClick={this.saveData} />
           <Button text={'Cancel'} color={'#e85454'} onClick={this.close} />
         </ButtonGroup>
+        */}
       </Dialog>
     )
   }

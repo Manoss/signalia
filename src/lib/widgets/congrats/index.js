@@ -7,7 +7,7 @@ module.exports = class Congrats extends BaseWidget {
     super({
       name: 'Congratulations',
       version: '0.1',
-      icon: 'gifts',
+      icon: 'redeem',
       defaultData: {
         animation: 'confetti',
         text: 'Congratulations!',

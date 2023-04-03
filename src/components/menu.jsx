@@ -9,16 +9,24 @@ import Icon from '@mui/material/Icon';
 function BasicMenu(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleChoice = (event, choice) => {
+    onSelect(choice.key)
+    console.log('handleChoice : ', event, ' Choice : ', choice)
+  }
   const title = props.title || ''
   const choices = [] = props.choices || []
+  const onSelect = props.onSelect
 
   console.debug('Menu choices : ', choices)
+  console.debug('onSelect : ', onSelect)
 
   return (
     <div>
@@ -44,7 +52,7 @@ function BasicMenu(props) {
             
                 <MenuItem
                     key={choice.key}
-                    onClick={handleClose}
+                    onClick={(event) => handleChoice(event, choice)}
                 >
                 <ListItemIcon>
                     <Icon fontSize="small">{choice.icon}</Icon>
