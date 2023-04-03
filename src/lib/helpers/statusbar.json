@@ -1,0 +1,18 @@
+{
+  "time": {
+    "name": "time",
+    "icon": "schedule"
+  },
+  "date": {
+    "name": "date",
+    "icon": "today"
+  },
+  "spacer": {
+    "name": "spacer",
+    "icon": "space_bar"
+  },
+  "connection": {
+    "name": "connection",
+    "icon": "lan"
+  }
+}

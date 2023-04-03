@@ -4,7 +4,8 @@ import Link from 'next/link'
 //import { faTv, faCheck, faTimes, faAngleLeft } from '@fortawesome/free-solid-svg-icons'
 import Router from 'next/router'
 // i18next
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 //import { display } from '../stores'
 //import { addUser } from '../actions/user.js'
@@ -322,5 +323,16 @@ function Register(){
     )
 }
 
+// or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 export default Register

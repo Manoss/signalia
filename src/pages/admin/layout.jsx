@@ -1,24 +1,25 @@
 import React from 'react'
 
-//import GridLayout from 'react-grid-layout'
-//import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import GridLayout, {WidthProvider} from 'react-grid-layout'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 //import { view } from '@risingstack/react-easy-state'
 
 // i18next
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import Frame from '../../components/admin/Frame'
-//import EditableWidget from '../components/Admin/EditableWidget'
-//import StatusBarElement from '../components/Admin/StatusBarElement'
+import EditableWidget from '../../components/admin/EditableWidget'
+import StatusBarElement from '../../components/admin/StatusBarElement'
 //import WidthProvider from '../components/Widgets/WidthProvider'
-//import DropdownButton from '../components/DropdownButton'
+import DropdownButton from '../../components/DropdownButton'
 
 //import { Form, Switch } from '../components/Form'
 
 //import { StatusBarElementTypes } from '../helpers/statusbar.js'
 
-//import Widgets from '../widgets'
+import Widgets from '../../lib/widgets'
 
 //import { addWidget, getWidgets, deleteWidget, updateWidget } from '../actions/widgets'
 
@@ -28,22 +29,41 @@ import { useRouter } from 'next/router.js'
 //import { display } from '../stores'
 import displays from '../../lib/db-fictive/displays'
 
-//const GridLayoutWithWidth = WidthProvider(GridLayout)
+import Icon from '@mui/material/Icon';
+import BasicMenu from '@/components/menu'
+
+import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
+
+
 
 function Layout(props) {
+  const GridLayoutWithWidth = WidthProvider(GridLayout)
   const router = useRouter()
+  const [statusBarElement, setStatusBarElement] = React.useState(StatusBarElementTypes)
   const [widgets, setWidgets] = React.useState(props.widgets || [])
   const { t } = useTranslation()
   const Session = useSession()
   const loggedIn = Session.status ==='authenticated'
-  /**
+  
+  React.useEffect(() => {
+    /**
+    async function fetchData() {
+      setStatusBarElement(await StatusBarElementTypes)
+    }
+    fetchData
+    */
+    console.debug('useEffect')
+  }, [statusBarElement]) 
+
+
+  
   const layout = widgets.map(widget => ({
     i: widget._id,
     x: widget.x || 0,
     y: widget.y || 0,
     w: widget.w || 1,
     h: widget.h || 1
-  }))*/
+  }))
 
   const display = displays[0]
 /** TODO : React.useEffect()
@@ -63,7 +83,7 @@ function Layout(props) {
 */
   const refresh = async () => {
     const widgets = null //await getWidgets(display.id)
-    this.setState({ widgets })
+    setWidgets({widgets})
   }
 
   const addWidget = async type => {
@@ -107,7 +127,7 @@ function Layout(props) {
             onChange={event => {
               const target = event.target
               const title = target && target.value
-              display.updateName(title)
+              //display.updateName(title)
             }}
             onClick={e => {
               if (e) e.stopPropagation()
@@ -115,29 +135,39 @@ function Layout(props) {
             size={display && display.name && display.name.length}
           />
           <div className='icon'>
-            icone pencil
+          <Icon fontSize="small">create</Icon>
           </div>
         </div>
       </div>
       <div className='settings'>
-        Stteings layout status bar
+        <BasicMenu
+          icon='add'
+          onSelect={display.addStatusBarItem}
+          title={t('layout.settings.item')} 
+          choices={Object.keys(StatusBarElementTypes).map(statusBarEl => ({
+            key: statusBarEl,
+            name: StatusBarElementTypes[statusBarEl].name,
+            icon: StatusBarElementTypes[statusBarEl].icon
+          }))}>
+
+        </BasicMenu>
         {/** 
         <DropdownButton
           icon='plus'
           text={t('layout.settings.item')}
-          onSelect={display.addStatusBarItem}
+          onSelect={display}//onSelect={display.addStatusBarItem}
+          /** 
           choices={Object.keys(StatusBarElementTypes).map(statusBarEl => ({
             key: statusBarEl,
             name: StatusBarElementTypes[statusBarEl].name,
             icon: StatusBarElementTypes[statusBarEl].icon
           }))}
-        />*/}
+        />
+      */}
       </div>
       <div className='statusbar'>
-        {display && display.statusBar && (
-          <h1>DropContext</h1>
-          /** 
-          <DragDropContext onDragEnd={this.onDragEnd}>
+        {display && display.statusBar && (    
+          <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId='droppable' direction='horizontal'>
               {provided => (
                 <div
@@ -154,35 +184,37 @@ function Layout(props) {
                   }}
                   {...provided.droppableProps}
                 >
-                  {display.statusBar.map((item, index) => (
+                  {display.statusBar.map((item, index) => (                
                     <StatusBarElement
                       item={item}
                       key={index}
                       index={index}
-                      onDelete={display.removeStatusBarItem.bind(this, index)}
+                      onDelete={display}//{display.removeStatusBarItem.bind(this, index)}
                     />
                   ))}
                   {provided.placeholder}
+          
                 </div>
               )}
             </Droppable>
           </DragDropContext>
-          */
+          
         )}
       </div>
       <div className='settings'>
-        settings
-        {/** 
-        <DropdownButton
-          icon='plus'
-          text={t('layout.settings.widget')}
-          onSelect={this.addWidget}
+
+        <BasicMenu 
+          icon='add'
+          onSelect={addWidget}
+          title={t('layout.settings.widget')}
           choices={Object.keys(Widgets).map(widget => ({
             key: widget,
             name: Widgets[widget].name,
             icon: Widgets[widget].icon
-          }))}
-        />
+          }))}>
+
+        </BasicMenu>
+{/** 
         <Form>
           <Switch
             checkedLabel={t('layout.compact')}
@@ -195,13 +227,11 @@ function Layout(props) {
         </Form>
         */}
       </div>
-      <div className='layout'>
-      GridLayoutWithWidth
-      {/**
+      <div className='layout'>  
         <GridLayoutWithWidth
           layout={layout}
           cols={6}
-          onLayoutChange={this.onLayoutChange}
+          onLayoutChange={onLayoutChange}
           draggableCancel={'.ReactModalPortal,.controls'}
           margin={display.layout == 'spaced' ? [12, 12] : [4, 4]}
         >
@@ -210,13 +240,13 @@ function Layout(props) {
               <EditableWidget
                 id={widget._id}
                 type={widget.type}
-                onDelete={this.deleteWidget.bind(this, widget._id)}
+                onDelete={deleteWidget.bind(this, widget._id)}
                 layout={display.layout}
               />
             </div>
           ))}
         </GridLayoutWithWidth>
-      */}
+      
       </div>
       <style jsx>
         {`
@@ -282,5 +312,16 @@ function Layout(props) {
   )
 }
 
+// or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 export default Layout

@@ -3,7 +3,8 @@ import { useRef }from 'react'
 //import { view } from '@risingstack/react-easy-state'
 
 // i18next
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import Frame from '../../../components/admin/Frame'
 import ScreenList from '../../../components/admin/ScreenList'
@@ -26,38 +27,6 @@ function Screens(props)  {
   const Session = useSession()
   const screenList = useRef()
   const { t } = useTranslation()
-
-  //TODO add Helper Testing
-  const addDisplay = {
-  
-    _id: {
-      $oid: "63fe1510493ec27e2418074c"
-    },
-    layout: "spaced",
-    widgets: [
-      {
-        $oid: "63fe1f6d0ec17d9704c48d50"
-      },
-      {
-        $oid: "640210a4be6f8ede55b3c092"
-      },
-      {
-        $oid: "6405a9d5f8db32bd73ca9dba"
-      },
-      {
-        $oid: "640b2ed69b8a097b82defbbd"
-      },
-      {
-        $oid: "6421a9367cf4b7782e3971a0"
-      }
-    ],
-    name: "Maison Accueil",
-    statusBar: [
-      "date_TFuo8HOfO",
-      "spacer_dqjssq293h",
-      "time__qv5YEH5m4"
-    ]
-  }
 
   const add = () => {
 
@@ -112,6 +81,18 @@ function Screens(props)  {
       </Frame>
     )
   }
+
+  // or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 //withSession(Screens)
 export default Screens

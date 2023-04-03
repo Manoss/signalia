@@ -1,10 +1,8 @@
 import '@/styles/globals.css'
-import i18n from '../../helpers/i18n'
-import { I18nextProvider } from 'react-i18next'
 import { SessionProvider } from "next-auth/react"
-import { Suspense } from 'react'
+import { appWithTranslation } from 'next-i18next'
 
-export default function App({ 
+function App({ 
   Component, 
   pageProps: {
     session,
@@ -12,13 +10,11 @@ export default function App({
   } }) {
   return (
   <>
-    <Suspense fallback="Loadding data...">
     <SessionProvider session={session}>  
-    <I18nextProvider i18n={i18n}>
       <Component {...pageProps} />
-    </I18nextProvider>
     </SessionProvider>
-    </Suspense>
   </>
   )
 } 
+
+export default appWithTranslation(App)

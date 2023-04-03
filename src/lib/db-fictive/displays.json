@@ -1,7 +1,6 @@
-[{
-    "_id": {
-      "$oid": "63fe1510493ec27e2418074c"
-    },
+[
+  {
+    "_id": "63fe1510493ec27e2418074c",
     "layout": "spaced",
     "widgets": [
       {
@@ -20,10 +19,41 @@
         "$oid": "6421a9367cf4b7782e3971a0"
       }
     ],
-    "name": "Maison Accueil",
+    "name": "Maison Accueil 2",
     "statusBar": [
       "date_TFuo8HOfO",
       "spacer_dqjssq293h",
       "time__qv5YEH5m4"
     ]
-  }]
+  },
+  {
+    "_id": "63d4e7c46a7a652131f8a10b",
+    "layout": "spaced",
+    "widgets": [
+      {
+        "$oid": "63d8003d6cc509204920e7e5"
+      },
+      {
+        "$oid": "63d8003d6cc509204920e7e5"
+      },
+      {
+        "$oid": "63d8003d6cc509204920e7e5"
+      },
+      {
+        "$oid": "63d8003d6cc509204920e7e5"
+      },
+      {
+        "$oid": "63d8003d6cc509204920e7e5"
+      },
+      {
+        "$oid": "63d8003d6cc509204920e7e5"
+      }
+    ],
+    "name": "Maison Accueil",
+    "statusBar": [
+      "date_Y4hNlNFOV",
+      "spacer_sDSjPjxRd",
+      "time_P0hcudTw2z"
+    ]
+  }
+]

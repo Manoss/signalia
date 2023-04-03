@@ -2,22 +2,36 @@ import React, {useState} from 'react'
 import Link from 'next/link'
 import Router from 'next/router'
 import Button from '@mui/material/Button';
+
 //import DropdownButton from '../components/DropdownButton'
 
 // i18next
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 //import { getDisplays } from '../actions/display'
 
 function Index()  {
   const [displays, setDisplays] = useState()
-  const {t, ready } = useTranslation()
+  const {t} = useTranslation()
 
 
   const navigateToDisplay = id => {
     Router.push('/display/' + id)
   }
 
+  const styles = {
+    btn: {
+      padding: 20,
+      textDecoration: 'none',
+      textTransform: 'uppercase',
+      borderRadius: 4,
+      fontSize: 16
+    },
+    btnAdmin: {
+      background: '#03a9f4'
+    }
+  }
   return (
   <div className='home'>
     <p>{t('index.home')}</p>
@@ -68,21 +82,21 @@ function Index()  {
   </div>
 )
 
+}
 
 
-const styles = {
-  btn: {
-    padding: 20,
-    textDecoration: 'none',
-    textTransform: 'uppercase',
-    borderRadius: 4,
-    fontSize: 16
-  },
-  btnAdmin: {
-    background: '#03a9f4'
+// or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
   }
 }
-}
+/**
 export async function getServerSideProps({req}){
   const host =
     req && req.headers && req.headers.host ? 'http://' + req.headers.host : window.location.origin
@@ -90,5 +104,5 @@ export async function getServerSideProps({req}){
   return { props: {displays: displayList, host: host }}
 
 }
-
+*/
 export default Index

@@ -23,7 +23,8 @@ import CardActions from '@mui/material/CardActions';
 import { signIn } from "next-auth/react"
 
 // i18next
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import Frame from '../components/Frame'
 //import { display } from '../stores'
@@ -247,6 +248,18 @@ function Login()  {
     </Card>
   </Box>
   )
+}
+
+// or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
 }
 
 

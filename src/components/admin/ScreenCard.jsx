@@ -16,11 +16,10 @@ function ScreenCard(props) {
 
 
   return (
-    <Link href={'/admin/layout?display=' + value._id}>
       <div className='card'>
         <div className='left'>
           <div className={'thumbnail'}>
-          <Icon fontSize="small">tv</Icon>
+            <Icon fontSize="small">tv</Icon>
           </div>
         </div>
         <div className='middle'>
@@ -55,20 +54,14 @@ function ScreenCard(props) {
             </div>
           </Link>
           <div className='actionIcon'>
-          <Icon fontSize="small">delete</Icon>
-    {/**
-            <FontAwesomeIcon
-              icon={faTrash}
-              fixedWidth
-              color='#828282'
+          <Icon   
               onClick={e => {
                 if (e) e.stopPropagation()
                 deleteDisplay(value._id).then(refresh)
               }}
-            />
-    */}
+              fontSize="small">delete</Icon>
           </div>
-        </div>
+          </div>
         <style jsx>
           {`
             .card {
@@ -181,7 +174,6 @@ function ScreenCard(props) {
           `}
         </style>
       </div>
-    </Link>
   )
 }
 

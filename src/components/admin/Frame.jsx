@@ -5,8 +5,9 @@
 
 
 import Sidebar from './Sidebar'
+import displays from '../../lib/db-fictive/displays.json' 
 //import { display } from '../../stores'
-const display = {id:'ftyszodjoidjrfarkpo'}
+const display = displays[0]
 
 const Frame = props => (
   <div className='container'>

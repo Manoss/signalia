@@ -6,6 +6,7 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useRouter } from 'next/router'
+import Icon from '@mui/material/Icon';
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 /**import {
   faKey,
@@ -18,7 +19,7 @@ import { useRouter } from 'next/router'
 import DropdownButton from '../DropdownButton'
 */
 // i18next
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 
 //import  {disp}  from '../../lib/store'
 //import { getDisplays } from '../../actions/display'
@@ -52,25 +53,25 @@ function Sidebar(props) {
           id: 'screen',
           name: t('sidebar.screen'),
           path: '/admin/screens?display=' + display.id,
-          icon: 'faTv'
+          icon: 'tv'
         },
         {
           id: 'layout',
           name: t('sidebar.layout'),
           path: '/admin/layout?display=' + display.id,
-          icon: 'faThLarge'
+          icon: 'grid_view'
         },
         {
           id: 'preview',
           name: t('sidebar.preview'),
           path: '/admin/preview?display=' + display.id,
-          icon: 'faEye'
+          icon: 'visibility'
         },
         {
           id: 'slideshow',
           name: t('sidebar.slideshow'),
           path: '/admin/slideshows?display=' + display.id,
-          icon: 'faImages'
+          icon: 'slideshow'
         }
       ]
     : [
@@ -78,7 +79,7 @@ function Sidebar(props) {
           id: 'login',
           name: t('sidebar.login'),
           path: '/login?display=' + display.id,
-          icon: 'faKey'
+          icon: 'login'
         }
       ]
 
@@ -122,12 +123,11 @@ function Sidebar(props) {
         {menu.map(item => (
           <Link href={item.path} key={item.path}>
             <li className={item.path == router.pathname && 'active'}>
-              <a>
-                <span className={'text'}>
-                  {'   '}
-                  {item.name}
-                </span>
-              </a>
+              <Icon fontSize="small">{item.icon}</Icon>
+              <span className={'text'}>
+                {'   '}
+                {item.name}
+              </span>
             </li>
           </Link>
         ))}
@@ -135,9 +135,9 @@ function Sidebar(props) {
       )}    
       {loggedIn && (
         <div className='logout' onClick={() => signOut({callbackUrl: '/'})}>
-          <a>
-            <span className={'text'}>{t('sidebar.logout')}</span>
-          </a>
+          <Icon fontSize="small">logout</Icon>
+          <span className={'text'}>{t('sidebar.logout')}</span>
+        
         </div>
       )}
       <style jsx>
