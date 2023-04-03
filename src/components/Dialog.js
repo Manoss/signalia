@@ -14,6 +14,7 @@ export default function FormDialog(props) {
     if (e) e.stopPropagation()
     console.debug('Open - Props : ', props)
     setDialogIsOpen(true);
+    console.debug('Open - Props : ', props, ' isOpen : ', dialogIsOpen)
   };
 
   const close = () => {
@@ -23,6 +24,7 @@ export default function FormDialog(props) {
 
   return (
     <div>
+      <h1>{props.children}</h1>
       <Dialog open={dialogIsOpen} onClose={close}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>

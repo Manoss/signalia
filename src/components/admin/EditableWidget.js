@@ -27,13 +27,13 @@ import WidgetEditDialog from './WidgetEditDialog'
 
 function EditableWidget(props) {
   const dialog = React.useRef()
-  console.debug('props : ', props)
+  console.debug('props : ', dialog)
 
 
   const open = e => {
     if (e) e.stopPropagation()
     console.log('Open : ', dialog.current, ' e ', e)
-    dialog && dialog.current.open()
+    dialog && dialog.current//.open()
   }
 
   const deleteClicked = e => {
@@ -41,6 +41,14 @@ function EditableWidget(props) {
     const { onDelete = () => {} } = props
     onDelete()
   }
+
+  // HeaderComponent
+
+  const handleNext = () => {
+    const dialogInstance = dialog.current.getInstance();
+    dialogInstance.next()
+  }
+
 
 //
   const { type = 'slideshow', id, layout = 'spaced' } = props

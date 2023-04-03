@@ -1,64 +1,59 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Dialog from '../Dialog'
 //import { Form, Button, ButtonGroup } from '../Form'
 //import { getWidget, updateWidget } from '../../actions/widgets'
 
-class WidgetEditDialog extends React.Component {
-  constructor() {
-    super()
+function WidgetEditDialog(props) {
+  const [data, setData] = React.useState({})
+  const [id, setId] = React.useState(props.id)
+  const dialog = React.createRef(props.ref)
 
-    this.state = {}
-    this.dialog = React.createRef()
-  }
+  useEffect(() => {
+    setId(props.id)
+  })
 
-  open = e => {
+  const open = e => {
     console.debug('Open - e : ', e)
     if (e) e.stopPropagation()
-    this.dialog && this.dialog.current && this.dialog.current.open()
+    dialog && dialog.current && dialog.current.open()
   }
 
-  close = e => {
+  const close = e => {
     if (e) e.stopPropagation()
     return Promise.resolve().then(
-      () => this.dialog && this.dialog.current && this.dialog.current.close()
+      () => dialog && dialog.current && dialog.current.close()
     )
   }
 
-  handleChange = data => {
-    this.setState({
-      data
-    })
+  const handleChange = data => {
+    setData(data)
   }
 
-  saveData = () => {
-    const { id } = this.props
-    const { data } = this.state
+  const saveData = () => {
     return updateWidget(id, { data }).then(() => {
-      this.close()
+      close()
     })
   }
-
+/**
   componentDidMount() {
     const { id } = this.props
     //getWidget(id).then(({ data }) => this.setState({ data }))
   }
+*/
 
-  render() {
-    //const { OptionsComponent = Form } = this.props
-    const { data } = this.state
-    return (
-      <Dialog ref={this.dialog}>
-        {/**
-        <OptionsComponent data={data} onChange={this.handleChange} />
-    
-        <ButtonGroup style={{ marginTop: 20 }}>
-          <Button text={'Save'} color={'#8bc34a'} onClick={this.saveData} />
-          <Button text={'Cancel'} color={'#e85454'} onClick={this.close} />
-        </ButtonGroup>
-        */}
-      </Dialog>
-    )
-  }
+  return (
+    <Dialog ref={dialog}>
+      {/**
+      <OptionsComponent data={data} onChange={this.handleChange} />
+  
+      <ButtonGroup style={{ marginTop: 20 }}>
+        <Button text={'Save'} color={'#8bc34a'} onClick={this.saveData} />
+        <Button text={'Cancel'} color={'#e85454'} onClick={this.close} />
+      </ButtonGroup>
+      */}
+    </Dialog>
+  )
 }
+
 
 export default WidgetEditDialog

@@ -206,7 +206,6 @@ function Layout(props) {
             name: Widgets[widget].name,
             icon: Widgets[widget].icon
           }))}>
-
         </BasicMenu>
 {/** 
         <Form>
