@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, forwardRef} from 'react'
 import _ from 'lodash'
 
 //import Dialog from '../Dialog'
@@ -12,7 +12,7 @@ import { useTranslation } from 'next-i18next'
 
 import { ButtonGroup, Button, Input, Stack, Dialog } from '@mui/material';
 
-function SlideEditDialog(props) {
+const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   /** 
   const [upload, setUpload] = React.useState(props.upload,
     ...(props.upload ? { type: 'photo' } : {}))
@@ -25,6 +25,7 @@ function SlideEditDialog(props) {
 
   useEffect(() => {
     console.debug('useEffect')
+    console.debug('ref : ', ref, ' props : ', props)
     //refresh()
   })
 /**
@@ -172,7 +173,7 @@ function SlideEditDialog(props) {
       </Stack>
     </Dialog>
   )
-}
+})
 
 // or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
 /**

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState, createRef} from 'react'
 
 //import { view } from '@risingstack/react-easy-state'
 
@@ -11,6 +11,9 @@ import SlideshowList from '../../components/admin/SlideshowList'
 //import Dialog from '../components/Dialog.js'
 //import { Button } from '../components/Form'
 
+import Button from '@mui/material/Button';
+import Icon from '@mui/material/Icon';
+
 //import { addSlideshow } from '../actions/slideshow'
 
 //import { display } from '../stores'
@@ -19,7 +22,7 @@ import { useRouter } from 'next/router.js'
 import { useSession } from "next-auth/react"
 
 function Slideshows(props) {
-  const slideshowList = React.createRef()
+  const slideshowList = createRef()
   const Session = useSession()
   const router = useRouter()
   const { t } = useTranslation()
@@ -45,13 +48,10 @@ function Slideshows(props) {
       <div className='wrapper'>
         <SlideshowList ref={slideshowList} />
         {/**
-        <Dialog />
+        <Dialog />*/}
         <Button
-          text={t('slideshows.button')}
-          color={'#8bc34a'}
-          onClick={this.add}
-          style={{ marginLeft: 0, width: '100%' }}
-        /> */}
+          onClick={add}
+        >{t('slideshows.button')}</Button>
       </div>
       <style jsx>
         {`

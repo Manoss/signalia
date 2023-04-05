@@ -12,14 +12,21 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Frame from '../../../../components/admin/Frame'
 import SlideList from '../../../../components/admin/SlideList'
 import SlideEditDialog from '../../../../components/admin/SlideEditDialog'
-//import Upload from '../../../components/Upload.js'
+import Upload from '../../../../components/Upload'
 //import Button from '../../../components/Form/Button.js'
 import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
+import Stack from '@mui/material/Stack';
 //import Dialog from '../../../components/Dialog.js'
+import Dialog from '../../../../components/Dialog'
 
 //import { getSlideshow, updateSlideshow } from '../../../actions/slideshow'
 //import { display } from '../../../stores'
+
+/**
+ * DB fictive - 
+ */
+import displays from '../../../../lib/db-fictive/displays.json'
 
 import { useRouter } from 'next/router.js'
 import { useSession } from "next-auth/react"
@@ -28,18 +35,22 @@ const updateSlideshowThrottled = _.debounce((id, data) => {
   return updateSlideshow(id, data)
 }, 300)
 
-function Slideshow(props) {
+function Slideshow(props) { 
+  const dialog = createRef(null)
   const [slideshow, setSlideshow] = useState(props.slideshow)
+  const handleOpen = React.useCallback(() => dialog.current?.open(), [])
+  const [open, setOpen] = useState(false)
   const slideList = createRef()
-  const dialog = createRef()
   const router = useRouter()
   const Session = useSession()
   const { t } = useTranslation()
   const loggedIn = Session.status ==='authenticated'
+  //DB fictive
+  const display = displays[0]
 
   useEffect(() => {
-    
-    const displayId = router.query.display
+    console.log('useEffect dialog : ', dialog.current)
+    const displayId = display._id//router.query.display
     console.log('displayId : ', displayId)
     //display.setId(displayId)
 
@@ -71,7 +82,8 @@ function Slideshow(props) {
   }
 
   const openAddDialog = () => {
-    return Promise.resolve(dialog && dialog.current.open())
+    //return handleOpen()
+    return Promise.resolve(dialog && dialog.current?.open())
   }
 
   return (
@@ -111,22 +123,25 @@ function Slideshow(props) {
           size={slideshow && slideshow.title && slideshow.title.length}
         />
         <div className='icon'>
-          <Icon fontSize="small">pencil</Icon>
+          <Icon fontSize="small">create</Icon>
         </div>
       </div>
+      
       <div className='wrapper'>
-
-        {/**<Upload slideshow={slideshow && slideshow._id} refresh={this.refresh} /> */}
-        <SlideEditDialog
-          slideshow={slideshow && slideshow._id}
-          refresh={refresh}
-          ref={dialog}
-        />
-        <Button
-          onClick={openAddDialog}
-        >{t('slideshow.button')}</Button>
-        <SlideList ref={slideList} slideshow={slideshow && slideshow._id} />
-        {/**<Dialog />*/}
+        <Stack spacing={2}>
+          <Upload slideshow={slideshow && slideshow._id} refresh={refresh} />
+          <SlideEditDialog
+            slideshow={slideshow && slideshow._id}
+            refresh={refresh}
+            ref={e => dialog.current = e}
+          />
+          <Button 
+            variant="contained"
+            onClick={openAddDialog}
+          >{t('slideshow.button')}</Button>
+          <SlideList ref={slideList} slideshow={slideshow && slideshow._id} />
+        </Stack>
+        <Dialog />
       </div>
       <style jsx>
         {`
