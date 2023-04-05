@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef, useEffect} from 'react'
 import Icon from '@mui/material/Icon';
 /**
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -26,10 +26,11 @@ import Widgets from '../../lib/widgets'
 import WidgetEditDialog from './WidgetEditDialog'
 
 function EditableWidget(props) {
-  const dialogRef = React.useRef()
+  const dialogRef = useRef()
+  const { type = 'slideshow', id, layout = 'spaced' } = props
+  const widget = Widgets[type] || {}
   //const dialog = () => dialogRef.current()
   console.debug('props : ', dialogRef)
-
 
   const open = e => {
     if (e) e.stopPropagation()
@@ -50,10 +51,6 @@ function EditableWidget(props) {
     dialogInstance.next()
   }
 
-
-//
-  const { type = 'slideshow', id, layout = 'spaced' } = props
-  const widget = Widgets[type] || {}
   return (
     <div className={'widget'}>
       <div className={'controls'}>

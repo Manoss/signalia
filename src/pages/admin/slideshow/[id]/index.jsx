@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect, useState, useRef, createRef} from 'react'
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import Frame from '../../../../components/admin/Frame'
-import SlideList from '../../../../components/admin/SlideList.js'
+import SlideList from '../../../../components/admin/SlideList'
 import SlideEditDialog from '../../../../components/admin/SlideEditDialog'
 //import Upload from '../../../components/Upload.js'
 //import Button from '../../../components/Form/Button.js'
@@ -29,9 +29,9 @@ const updateSlideshowThrottled = _.debounce((id, data) => {
 }, 300)
 
 function Slideshow(props) {
-  const [slideshow, setSlideshow] = React.useState(props.slideshow)
-  const slideList = React.createRef()
-  const dialog = React.createRef()
+  const [slideshow, setSlideshow] = useState(props.slideshow)
+  const slideList = createRef()
+  const dialog = createRef()
   const router = useRouter()
   const Session = useSession()
   const { t } = useTranslation()
@@ -39,11 +39,11 @@ function Slideshow(props) {
 
   useEffect(() => {
     
-    const displayId = props.router.query.display
+    const displayId = router.query.display
     console.log('displayId : ', displayId)
     //display.setId(displayId)
 
-  })
+  },[])
   /**
   componentDidMount() {
     //const { displayId } = this.props
@@ -53,16 +53,25 @@ function Slideshow(props) {
   }
  */
   const refresh = () => {
-    const { _id: id } = props.slideshow
+    
+    console.debug('Refresh')
+    /** 
+    const { _id: id } = slideshow
+    
     return getSlideshow(id).then(slideshow => {
+      setSlideshow({ slideshow }, () => {
+        slideList && slideList.current && slideList.current.refresh()
+      }) 
+      /**
       this.setState({ slideshow }, () => {
-        this.slideList && this.slideList.current && this.slideList.current.refresh()
+        slideList && slideList.current && slideList.current.refresh()
       })
-    })
+      
+    })*/
   }
 
   const openAddDialog = () => {
-    return Promise.resolve(this.dialog && this.dialog.current.open())
+    return Promise.resolve(dialog && dialog.current.open())
   }
 
   return (
@@ -76,17 +85,25 @@ function Slideshow(props) {
           onChange={event => {
             const target = event.target
             const title = target && target.value
+            setSlideshow({
+              ...slideshow,
+              title
+            }, () => {
+              updateSlideshowThrottled(slideshow._id, { title })
+            } )
+            /** 
             this.setState(
               {
                 slideshow: {
                   ...slideshow,
                   title
                 }
-              },
+              }, 
               () => {
                 updateSlideshowThrottled(slideshow._id, { title })
               }
             )
+            */
           }}
           onClick={e => {
             if (e) e.stopPropagation()
@@ -102,16 +119,13 @@ function Slideshow(props) {
         {/**<Upload slideshow={slideshow && slideshow._id} refresh={this.refresh} /> */}
         <SlideEditDialog
           slideshow={slideshow && slideshow._id}
-          refresh={this.refresh}
-          ref={this.dialog}
+          refresh={refresh}
+          ref={dialog}
         />
         <Button
-          text={t('slideshow.button')}
-          color='#7bc043'
-          style={{ flex: 1, margin: 0, width: '100%', marginTop: 20 }}
-          onClick={this.openAddDialog}
-        />
-        <SlideList ref={this.slideList} slideshow={slideshow && slideshow._id} />
+          onClick={openAddDialog}
+        >{t('slideshow.button')}</Button>
+        <SlideList ref={slideList} slideshow={slideshow && slideshow._id} />
         {/**<Dialog />*/}
       </div>
       <style jsx>
@@ -159,7 +173,7 @@ function Slideshow(props) {
   )
 }
 
-
+/** 
 export async function getServerSideProps({query,req}){
   const id = query && query.id
   const host =
@@ -167,10 +181,10 @@ export async function getServerSideProps({query,req}){
   const slideshow = id && (await getSlideshow(id, host))
   return { props: {slideshow: slideshow, host: host }}
 }
+*/
 
 // or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
-/**
-export async function getStaticProps({ locale }) {
+export async function getServerSideProps ({ locale }) {
   return {
     props: {
       ...(await serverSideTranslations(locale, [
@@ -180,6 +194,5 @@ export async function getStaticProps({ locale }) {
     },
   }
 }
-*/
 
-export default withRouter(withTranslation() (withSession(view(Slideshow))))
+export default Slideshow

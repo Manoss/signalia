@@ -1,25 +1,33 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import _ from 'lodash'
 
-import Dialog from '../Dialog'
-import { Form, Input, Button, ButtonGroup } from '../Form'
+//import Dialog from '../Dialog'
+//import { Form, Input, Button, ButtonGroup } from '../Form'
 
-import { getSlide, addSlide, updateSlide } from '../../actions/slide'
+//import { getSlide, addSlide, updateSlide } from '../../actions/slide'
 
-class SlideEditDialog extends React.Component {
-  constructor(props) {
-    super(props)
+// i18next
+import { useTranslation } from 'next-i18next'
+//import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-    this.state = {
-      upload: props.upload,
-      ...(props.upload ? { type: 'photo' } : {})
-    }
-  }
+import { ButtonGroup, Button, Input, Stack, Dialog } from '@mui/material';
 
-  componentDidMount() {
-    this.refresh()
-  }
+function SlideEditDialog(props) {
+  /** 
+  const [upload, setUpload] = React.useState(props.upload,
+    ...(props.upload ? { type: 'photo' } : {}))
+  */
+  const [state, setState] = useState({})
+  const [dialog,setDialog] = useState(false)
+  const { data, title, description, duration, type = 'photo', upload } = state
+  const { t } = useTranslation()
 
+
+  useEffect(() => {
+    console.debug('useEffect')
+    //refresh()
+  })
+/**
   componentDidUpdate(prevProps) {
     if (this.props.upload != prevProps.upload) {
       this.setState({
@@ -28,12 +36,12 @@ class SlideEditDialog extends React.Component {
       })
     }
   }
-
-  refresh = () => {
-    const { slide, upload } = this.props
+*/
+  const refresh = () => {
+    const { slide, upload } = props
     if (slide) {
       return getSlide(slide).then(data => {
-        this.setState({
+        setState({
           data: undefined,
           title: undefined,
           description: undefined,
@@ -45,7 +53,7 @@ class SlideEditDialog extends React.Component {
         })
       })
     } else {
-      this.setState({
+      setState({
         data: undefined,
         title: undefined,
         description: undefined,
@@ -58,108 +66,126 @@ class SlideEditDialog extends React.Component {
     }
   }
 
-  open = () => {
-    this.refresh()
-    this.dialog && this.dialog.open()
+  const open = () => {
+    console.debug('open')
+    refresh()
+    //dialog && dialog.open()
+    setDialog(true)
   }
 
-  close = () => {
-    const { refresh } = this.props
-    this.dialog && this.dialog.close()
+  const close = () => {
+    console.debug('close')
+    const { refresh } = props
+    setDialog(false)
+    //dialog && dialog.close()
     if (refresh) return refresh()
     return Promise.resolve()
   }
 
-  handleChange = (name, value) => {
-    this.setState({
+  const handleChange = (name, value) => {
+    setState({
       [name]: value,
       // Clean up data if the type of slide changed
       ...(name == 'type' ? { data: '' } : {})
     })
   }
 
-  save = () => {
-    const { slide, slideshow } = this.props
-    const { upload, ...otherProps } = this.state
+  const save = () => {
+    const { slide, slideshow } = props
+    const { upload, ...otherProps } = state
     if (slideshow) {
+      /**
       return addSlide(slideshow, upload, _.pickBy(otherProps, v => v !== undefined)).then(() => {
-        this.close()
-      })
+        close()
+      })*/
+      close()
     } else {
+      /**
       return updateSlide(slide, upload, _.pickBy(otherProps, v => v !== undefined)).then(() => {
-        this.close()
-      })
+        close()
+      })*/
+      close()
     }
   }
 
-  render() {
-    const { data, title, description, duration, type = 'photo', upload } = this.state
-
-    return (
-      <Dialog ref={ref => (this.dialog = ref)}>
-        <Form>
+  return (
+    <Dialog onClose={close} open={dialog}>
+      <form>
+        <Input
+          type={'select'}
+          name={'type'}
+          label={'Slide Type'}
+          value={type}
+          choices={[
+            { id: 'youtube', label: 'Youtube Video' },
+            { id: 'web', label: 'Web Page' },
+            { id: 'photo', label: 'Photo' }
+          ]}
+          onChange={handleChange}
+        />
+        {type == 'photo' || upload ? (
           <Input
-            type={'select'}
-            name={'type'}
-            label={'Slide Type'}
-            value={type}
-            choices={[
-              { id: 'youtube', label: 'Youtube Video' },
-              { id: 'web', label: 'Web Page' },
-              { id: 'photo', label: 'Photo' }
-            ]}
-            onChange={this.handleChange}
+            type={'photo'}
+            label={'Photo'}
+            name={'upload'}
+            value={upload ? upload.preview : data}
+            onChange={handleChange}
+            inline={true}
           />
-          {type == 'photo' || upload ? (
-            <Input
-              type={'photo'}
-              label={'Photo'}
-              name={'upload'}
-              value={upload ? upload.preview : data}
-              onChange={this.handleChange}
-              inline={true}
-            />
-          ) : (
-            <Input
-              type={'text'}
-              label={type == 'web' ? 'Web URL' : type == 'youtube' ? 'Youtube URL' : 'Data'}
-              name={'data'}
-              value={data}
-              onChange={this.handleChange}
-            />
-          )}
-          <Input
-            type={'number'}
-            label={'Duration'}
-            name={'duration'}
-            value={duration}
-            placeholder={'5'}
-            onChange={this.handleChange}
-          />
+        ) : (
           <Input
             type={'text'}
-            label={'Title'}
-            name={'title'}
-            value={title}
-            placeholder={'Header title...'}
-            onChange={this.handleChange}
+            label={type == 'web' ? 'Web URL' : type == 'youtube' ? 'Youtube URL' : 'Data'}
+            name={'data'}
+            value={data}
+            onChange={handleChange}
           />
-          <Input
-            type={'textarea'}
-            label={'Description'}
-            name={'description'}
-            value={description}
-            placeholder={'Short content description...'}
-            onChange={this.handleChange}
-          />
-        </Form>
-        <ButtonGroup>
-          <Button text={'Save'} color={'#8bc34a'} onClick={this.save} />
-          <Button text={'Cancel'} color={'#e85454'} onClick={this.close} />
-        </ButtonGroup>
-      </Dialog>
-    )
+        )}
+        <Input
+          type={'number'}
+          label={'Duration'}
+          name={'duration'}
+          value={duration}
+          placeholder={'5'}
+          onChange={handleChange}
+        />
+        <Input
+          type={'text'}
+          label={'Title'}
+          name={'title'}
+          value={title}
+          placeholder={'Header title...'}
+          onChange={handleChange}
+        />
+        <Input
+          type={'textarea'}
+          label={'Description'}
+          name={'description'}
+          value={description}
+          placeholder={'Short content description...'}
+          onChange={handleChange}
+        />
+      </form>
+      <Stack direction="row"spacing={2}>
+        <Button onClick={save}>Save</Button>
+        <Button onClick={close}>Cancel</Button>
+      </Stack>
+    </Dialog>
+  )
+}
+
+// or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+/**
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
   }
 }
+*/
 
 export default SlideEditDialog

@@ -1,16 +1,16 @@
-import { Component } from 'react'
-import React from 'react'
-import ContentLoader from 'react-content-loader'
-import { SortableContainer, SortableElement } from 'react-sortable-hoc'
-import arrayMove from 'array-move'
+import React, {useEffect, useState} from 'react'
+//import ContentLoader from 'react-content-loader'
+//import { SortableContainer, SortableElement } from 'react-sortable-hoc'
+//import arrayMove from 'array-move'
 
 import SlideCard from './SlideCard'
 
-import { getSlides } from '../../actions/slide'
-import { reorderSlides } from '../../actions/slideshow'
+//import { getSlides } from '../../actions/slide'
+//import { reorderSlides } from '../../actions/slideshow'
 
-const SortableItem = SortableElement(SlideCard)
+//const SortableItem = SortableElement(SlideCard)
 
+/**
 const SortableList = SortableContainer(({ items, refresh }) => {
   return (
     <div className={'list'}>
@@ -45,15 +45,22 @@ const SortableList = SortableContainer(({ items, refresh }) => {
     </div>
   )
 })
+*/
 
-class SlideList extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      slides: null
-    }
-  }
+function SlideList(props) {
+  const [slides,  setSlides] = useState(null)
 
+  useEffect(()=>{
+    console.debug('useEffet Props : ', props)
+    const { slideshow } = props
+    /** 
+    getSlides(slideshow).then(slides => {
+      setSlides(slides)
+    })
+    */
+  })
+
+  /**
   componentDidMount() {
     console.debug('DidMount Props : ', this.props)
     const { slideshow } = this.props
@@ -63,49 +70,48 @@ class SlideList extends Component {
       })
     })
   }
+*/
 
-  onSortEnd = ({ oldIndex, newIndex }) => {
-    const { slideshow } = this.props
+  const onSortEnd = ({ oldIndex, newIndex }) => {
+    const { slideshow } = props
+    setSlides([...arrayMove(state.slides, oldIndex, newIndex)], () =>{reorderSlides(slideshow, oldIndex, newIndex)})
+    /** 
     this.setState(
       {
-        slides: [...arrayMove(this.state.slides, oldIndex, newIndex)]
+        slides: [...arrayMove(state.slides, oldIndex, newIndex)]
       },
       () => {
         reorderSlides(slideshow, oldIndex, newIndex)
       }
     )
+    */
   }
 
-  refresh = () => {
-    const { slideshow } = this.props
+  const refresh = () => {
+    const { slideshow } = props
     console.debug('Refresh SlideList ', slideshow)
     return getSlides(slideshow).then(slides => {
-      return this.setState({
-        slides: slides
-      })
+      return setSlides(slides) 
     })
   }
 
-  render() {
-    const { slides } = this.state
-    return slides ? (
-      <SortableList
-        items={slides}
-        refresh={this.refresh}
-        onSortEnd={this.onSortEnd}
-        distance={2}
-        lockAxis='y'
-      />
-    ) : (
-      Array(4)
-        .fill()
-        .map((i, index) => (
-          <ContentLoader height={120} width={640} key={`loading-${index}`}>
-            <rect x='0' y='0' rx='5' ry='5' width='100%' height='100' />
-          </ContentLoader>
-        ))
-    )
-  }
+  return slides ? (
+    <SlideCard
+      items={slides}
+      refresh={refresh}
+      onSortEnd={onSortEnd}
+      distance={2}
+      lockAxis='y'
+    />
+  ) : (
+    Array(4)
+      .fill()
+      .map((i, index) => (
+        <div height={120} width={640} key={`loading-${index}`}>
+          <rect x='0' y='0' rx='5' ry='5' width='100%' height='100' />
+        </div>
+      ))
+  )
 }
 
 export default SlideList

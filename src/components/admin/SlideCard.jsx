@@ -1,4 +1,3 @@
-import { Component } from 'react'
 import React from 'react'
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //import { faClock } from '@fortawesome/free-regular-svg-icons'
@@ -15,7 +14,7 @@ import Icon from '@mui/material/Icon';
 
 // i18next
 import { useTranslation } from 'next-i18next'
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+//import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 function SlideCard(props) {
   const dialog = React.createRef()
@@ -73,14 +72,17 @@ function SlideCard(props) {
                   deleteSlide(value._id)
                     .then(refresh)
                     .then(() => {
-                      this.setState({ loading: false })
+                      setLoading(false)
+                      //this.setState({ loading: false })
                     })
                 )
         }
         >delete</Icon>
         </div>
       </div>
-      <SlideEditDialog ref={this.dialog} slide={value._id} refresh={refresh} />
+     
+      <SlideEditDialog ref={dialog} slide={value._id} refresh={refresh} />
+    
       <style jsx>
         {`
           .card {
@@ -170,5 +172,17 @@ function SlideCard(props) {
   )
 }
 
-
-export default withTranslation() (SlideCard)
+// or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
+/**
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'common'
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
+*/
+export default SlideCard
