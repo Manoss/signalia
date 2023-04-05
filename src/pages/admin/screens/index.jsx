@@ -27,6 +27,7 @@ function Screens(props)  {
   const Session = useSession()
   const screenList = useRef()
   const { t } = useTranslation()
+  const loggedIn = Session.status ==='authenticated'
 
   const add = () => {
 
@@ -44,8 +45,6 @@ function Screens(props)  {
   }
 */
 
-
-    const loggedIn = Session.status ==='authenticated'
     console.log('LoggedIn Screens : ', loggedIn)
     return (
       <Frame loggedIn={loggedIn} display={null}>

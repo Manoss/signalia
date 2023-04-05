@@ -26,14 +26,15 @@ import Widgets from '../../lib/widgets'
 import WidgetEditDialog from './WidgetEditDialog'
 
 function EditableWidget(props) {
-  const dialog = React.useRef()
-  console.debug('props : ', dialog)
+  const dialogRef = React.useRef()
+  //const dialog = () => dialogRef.current()
+  console.debug('props : ', dialogRef)
 
 
   const open = e => {
     if (e) e.stopPropagation()
-    console.log('Open : ', dialog.current, ' e ', e)
-    dialog && dialog.current//.open()
+    console.log('Open : ', dialogRef.current, ' e ', e)
+    dialogRef && dialogRef.current.open()
   }
 
   const deleteClicked = e => {
@@ -69,7 +70,7 @@ function EditableWidget(props) {
         </div>
         <span className={'type'}>{widget.name || 'Broken Widget'}</span>
       </div>
-      <WidgetEditDialog ref={dialog} OptionsComponent={widget.Options} id={id} />
+      <WidgetEditDialog dialogRef={dialogRef} OptionsComponent={widget.Options} id={id} />
       <style jsx>
         {`
           .widget {

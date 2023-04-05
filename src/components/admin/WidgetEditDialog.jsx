@@ -5,12 +5,16 @@ import Dialog from '../Dialog'
 
 function WidgetEditDialog(props) {
   const [data, setData] = React.useState({})
-  const [id, setId] = React.useState(props.id)
-  const dialog = React.createRef(props.ref)
+  const [id, setId] = React.useState()
+  const dialog = React.createRef(props.dialog)
 
   useEffect(() => {
-    setId(props.id)
-  })
+    props.dialogRef.current = open
+
+    return() => {
+      props.dialogRef.current = null
+    }
+  }),[]
 
   const open = e => {
     console.debug('Open - e : ', e)
