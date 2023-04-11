@@ -1,4 +1,9 @@
 import React, { Component } from 'react'
+import { Form, InlineInputGroup, Input } from '../../../../components/Form'
+import {TextField} from '@mui/material';
+import Icon from '@mui/material/Icon';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 //import { Form, Input, InlineInputGroup, Button } from '../../../components/Form'
 
 import ListContent from './ListContent'
@@ -30,7 +35,7 @@ class ListOptions extends Component {
 
   elementTextChange = (index, value) => {
     const { onChange = () => {} } = this.props
-    this.state.list[index].text = value
+    this.setState({list: [...this.state.list[index], value]})
     this.setState(
       {
         list: this.state.list
@@ -43,7 +48,7 @@ class ListOptions extends Component {
 
   elementLabelChange = (index, value) => {
     const { onChange = () => {} } = this.props
-    this.state.list[index].label = value
+    this.setState.list[index].label = value
     this.setState(
       {
         list: this.state.list
@@ -65,7 +70,11 @@ class ListOptions extends Component {
     const { onChange = () => {} } = this.props
     this.setState(
       {
-        list: this.state.list.filter((el, i) => i != index)
+        list: this.state.list.filter((el, i) => {
+          console.debug('El : ', el, ' Index : ', i)
+          i != index
+        
+        })
       },
       () => {
         onChange(this.state)
@@ -112,14 +121,14 @@ class ListOptions extends Component {
           <span className='subheader'>Element List</span>
           <div className='list'>
             {list.map(({ label, text }, index) => (
-              <InlineInputGroup>
+                <InlineInputGroup key={index}>
                 <Input
-                  inline={false}
-                  name={index}
-                  value={text}
-                  onChange={this.elementTextChange}
-                  placeholder={'Write some text...'}
-                  expand
+                inline={false}
+                name={index}
+                value={text}
+                onChange={this.elementTextChange}
+                placeholder={'Write some text...'}
+                expand
                 />
                 <Input
                   inline={false}
@@ -130,22 +139,18 @@ class ListOptions extends Component {
                   expand={false}
                 />
                 <div className={'deleteBtn'}>
-                  <FontAwesomeIcon
-                    icon={faTrash}
-                    fixedWidth
-                    color='#828282'
+                  <Icon 
                     onClick={() => this.deleteEntry(index)}
-                  />
+                    fontSize="small">delete</Icon>
+                    {index}
                 </div>
-              </InlineInputGroup>
+                </InlineInputGroup>
             ))}
           </div>
           <Button
-            text={' + Add Entry'}
-            color={'#8bc34a'}
+            variant="contained"
             onClick={this.addEntry}
-            style={{ margin: 0 }}
-          />
+          >{' + Add Entry'}</Button>
         </Form>
         <div className={'previewContainer'}>
           <p>Preview</p>

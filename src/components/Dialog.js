@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {forwardRef, useImperativeHandle} from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -7,8 +7,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function FormDialog(props) {
+const FormDialog = forwardRef(function FormDialog(props, ref) {
   const [dialogIsOpen, setDialogIsOpen] = React.useState(false);
+  const { children, style = {} } = props
+
+  useImperativeHandle(ref, () => ({
+    open: open,
+    close: close
+  }))
 
   const open = (e) => {
     if (e) e.stopPropagation()
@@ -17,7 +23,8 @@ export default function FormDialog(props) {
     console.debug('Open - Props : ', props, ' isOpen : ', dialogIsOpen)
   };
 
-  const close = () => {
+  const close = (e) => {
+    if (e) e.stopPropagation()
     console.debug('Close')
     setDialogIsOpen(false);
   };
@@ -28,25 +35,15 @@ export default function FormDialog(props) {
       <Dialog open={dialogIsOpen} onClose={close}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here. We
-            will send updates occasionally.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="standard"
-          />
+        <div className='form'>{children}</div>
         </DialogContent>
         <DialogActions>
+          <Button onClick={close}>Save</Button>
           <Button onClick={close}>Cancel</Button>
-          <Button onClick={close}>Subscribe</Button>
         </DialogActions>
       </Dialog>
     </div>
   );
-}
+})
+
+export default FormDialog

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, forwardRef} from 'react'
+import React, {useEffect, useState, forwardRef, useImperativeHandle} from 'react'
 import _ from 'lodash'
 
 //import Dialog from '../Dialog'
@@ -10,7 +10,7 @@ import _ from 'lodash'
 import { useTranslation } from 'next-i18next'
 //import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { ButtonGroup, Button, Input, Stack, Dialog } from '@mui/material';
+import { Button, Box, MenuItem, TextField, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
 const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   /** 
@@ -21,7 +21,17 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   const [dialog,setDialog] = useState(false)
   const { data, title, description, duration, type = 'photo', upload } = state
   const { t } = useTranslation()
+  const choices = [
+    { id: 'youtube', label: 'Youtube Video' },
+    { id: 'web', label: 'Web Page' },
+    { id: 'photo', label: 'Photo' }
+  ]
 
+ 
+
+  useImperativeHandle(ref, () => ({
+    open: open
+  }))
 
   useEffect(() => {
     console.debug('useEffect')
@@ -41,6 +51,7 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   const refresh = () => {
     const { slide, upload } = props
     if (slide) {
+    
       return getSlide(slide).then(data => {
         setState({
           data: undefined,
@@ -110,67 +121,86 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   }
 
   return (
-    <Dialog onClose={close} open={dialog}>
+    <Dialog 
+    sx={{
+      '& .MuiTextField-root': { m: 1, width: '50ch' },
+    }}
+      onClose={close} open={dialog}>
+      <DialogTitle>Title</DialogTitle>
+      <DialogContent>
       <form>
-        <Input
-          type={'select'}
+        <div>
+        <TextField
+          select
           name={'type'}
           label={'Slide Type'}
-          value={type}
-          choices={[
-            { id: 'youtube', label: 'Youtube Video' },
-            { id: 'web', label: 'Web Page' },
-            { id: 'photo', label: 'Photo' }
-          ]}
+          defaultValue={type}
           onChange={handleChange}
-        />
+        > {choices.map((choice) => (
+          <MenuItem key={choice.id} value={choice.id}>
+            {choice.label}
+          </MenuItem>
+        ))}</TextField>
+        </div>
         {type == 'photo' || upload ? (
-          <Input
+          <div>
+          <TextField
             type={'photo'}
             label={'Photo'}
             name={'upload'}
-            value={upload ? upload.preview : data}
+            defaultValue={upload ? upload.preview : data}
             onChange={handleChange}
             inline={true}
-          />
+          ></TextField>
+          </div>
         ) : (
-          <Input
+          <div>
+          <TextField
             type={'text'}
             label={type == 'web' ? 'Web URL' : type == 'youtube' ? 'Youtube URL' : 'Data'}
             name={'data'}
-            value={data}
+            defaultValue={data}
             onChange={handleChange}
-          />
+          ></TextField>
+          </div>
         )}
-        <Input
+        <div>
+        <TextField
           type={'number'}
           label={'Duration'}
           name={'duration'}
-          value={duration}
+          defaultValue={duration}
           placeholder={'5'}
           onChange={handleChange}
-        />
-        <Input
+        ></TextField>
+        </div>
+        <div>
+        <TextField
           type={'text'}
           label={'Title'}
           name={'title'}
-          value={title}
+          defaultValue={title}
           placeholder={'Header title...'}
           onChange={handleChange}
-        />
-        <Input
-          type={'textarea'}
+        ></TextField>
+        </div>
+        <div>
+        <TextField
+          multiline
+          rows={4}
           label={'Description'}
           name={'description'}
-          value={description}
+          defaultValue={description}
           placeholder={'Short content description...'}
           onChange={handleChange}
-        />
+        ></TextField>
+        </div>
       </form>
-      <Stack direction="row"spacing={2}>
-        <Button onClick={save}>Save</Button>
-        <Button onClick={close}>Cancel</Button>
-      </Stack>
+      </DialogContent>
+      <DialogActions>
+        <Button variant="contained"onClick={save}>Save</Button>
+        <Button variant="outlined"onClick={close}>Cancel</Button>
+      </DialogActions>
     </Dialog>
   )
 })

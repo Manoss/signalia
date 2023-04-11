@@ -1,4 +1,7 @@
 import React, { Component } from 'react'
+import {Form, InlineInputGroup, Input} from '../../../../components/Form'
+import {TextField} from '@mui/material';
+import Stack from '@mui/material/Stack';
 //import { Form, Input, InlineInputGroup } from '../../../components/Form'
 //import { standaloneUpload } from '../../../actions/slide'
 
@@ -40,7 +43,7 @@ class ImageOptions extends Component {
         <Form>
           <h3>Widget: Standalone Image</h3>
           <p>Choose your preferences for the image widget.</p>
-          <InlineInputGroup>
+      <InlineInputGroup>
             <Input
               inline={false}
               label={'Background'}

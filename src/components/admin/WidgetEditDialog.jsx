@@ -1,42 +1,66 @@
-import React, { useEffect } from 'react'
-import Dialog from '../Dialog'
+import React, { useEffect, forwardRef, useImperativeHandle, useState, createRef } from 'react'
+//import Dialog from '../Dialog'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Form from '../Form/Form'
 //import { Form, Button, ButtonGroup } from '../Form'
 //import { getWidget, updateWidget } from '../../actions/widgets'
+import widgets from '../../lib/db-fictive/widgets.json'
 
-function WidgetEditDialog(props) {
-  const [data, setData] = React.useState({})
-  const [id, setId] = React.useState()
-  const dialog = React.createRef(props.dialog)
+import Button from '@mui/material/Button';
+
+const WidgetEditDialog = forwardRef(function WidgetEditDialog(props, ref) {
+  const [data, setData] = useState({})
+  const [isOpen, setIsOpen] = useState(false)
+  const { OptionsComponent = Form } = props
+  const [id, setId] = useState()
+  const dialog = createRef(null)
+
+  useImperativeHandle(ref, () => ({
+    open: open,
+    handleChange: handleChange
+  }))
 
   useEffect(() => {
-    props.dialogRef.current = open
-
-    return() => {
-      props.dialogRef.current = null
-    }
+    console.debug('props : ', props)
+    getProps()
   }),[]
+
+  const getProps = () => {
+    setId(props.id)
+    setData(widgets[2].data)
+  }
 
   const open = e => {
     console.debug('Open - e : ', e)
     if (e) e.stopPropagation()
+    setIsOpen(true)
     dialog && dialog.current && dialog.current.open()
   }
 
   const close = e => {
     if (e) e.stopPropagation()
+    setIsOpen(false)
     return Promise.resolve().then(
       () => dialog && dialog.current && dialog.current.close()
     )
   }
 
   const handleChange = data => {
+    console.log('handleChange data : ', data)
     setData(data)
   }
 
   const saveData = () => {
+    console.debug('saveData : ', id, ' data : ', data)
+    close()
+    /*
     return updateWidget(id, { data }).then(() => {
       close()
     })
+    */
   }
 /**
   componentDidMount() {
@@ -46,18 +70,23 @@ function WidgetEditDialog(props) {
 */
 
   return (
-    <Dialog ref={dialog}>
-      {/**
-      <OptionsComponent data={data} onChange={this.handleChange} />
-  
-      <ButtonGroup style={{ marginTop: 20 }}>
-        <Button text={'Save'} color={'#8bc34a'} onClick={this.saveData} />
-        <Button text={'Cancel'} color={'#e85454'} onClick={this.close} />
-      </ButtonGroup>
-      */}
-    </Dialog>
+    <Dialog 
+    fullWidth={'true'}
+    maxWidth={'md'}
+    sx={{ m: 0, p: 2}} 
+    ref= {dialog} 
+    open={isOpen} onClose={close}>
+    <DialogContent>
+      <OptionsComponent data={data} onChange={handleChange} />
+    </DialogContent>
+    <DialogActions>
+      <Button variant="contained" onClick={saveData}>{'Save'}</Button>
+      <Button variant="outlined" onClick={close}>{'Cancel'}</Button>
+    </DialogActions>
+  </Dialog>
+
   )
-}
+})
 
 
 export default WidgetEditDialog

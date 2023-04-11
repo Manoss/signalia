@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 
-import GridLayout, {WidthProvider} from 'react-grid-layout'
+import GridLayout from 'react-grid-layout'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 //import { view } from '@risingstack/react-easy-state'
@@ -12,7 +12,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Frame from '../../components/admin/Frame'
 import EditableWidget from '../../components/admin/EditableWidget'
 import StatusBarElement from '../../components/admin/StatusBarElement'
-//import WidthProvider from '../components/Widgets/WidthProvider'
+import WidthProvider from '../../components/Widgets/WidthProvider'
 import DropdownButton from '../../components/DropdownButton'
 
 //import { Form, Switch } from '../components/Form'
@@ -21,17 +21,19 @@ import DropdownButton from '../../components/DropdownButton'
 
 import Widgets from '../../lib/widgets'
 
-//import { addWidget, getWidgets, deleteWidget, updateWidget } from '../actions/widgets'
+import { addWidget, getWidgets, deleteWidget, updateWidget } from '../../lib/actions/widgets'
 
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router.js'
 
 //import { display } from '../stores'
-import displaysDB from '../../lib/db-fictive/displays'
-import widgetsDB from '../../lib/db-fictive/widgets'
+import { getDisplay } from '@/lib/actions/display'
+//import displaysDB from '../../lib/db-fictive/displays'
+//import widgetsDB from '../../lib/db-fictive/widgets'
 
 import Icon from '@mui/material/Icon';
 import BasicMenu from '@/components/Menu'
+import {Switch, FormControlLabel} from '@mui/material'
 
 import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
 
@@ -40,14 +42,15 @@ import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
 function Layout(props) {
   const GridLayoutWithWidth = WidthProvider(GridLayout)
   const router = useRouter()
+  const [display,setDisplay] = useState(null)
   const [statusBarElement, setStatusBarElement] = React.useState(StatusBarElementTypes)
   const [widgets, setWidgets] = React.useState(props.widgets || [])
   const { t } = useTranslation()
   const Session = useSession()
   const loggedIn = Session.status ==='authenticated'
   
-  React.useEffect(() => {
-    setWidgets(widgetsDB)
+  useEffect(() => {
+    //setWidgets()
     /**
     async function fetchData() {
       setStatusBarElement(await StatusBarElementTypes)
@@ -57,7 +60,23 @@ function Layout(props) {
     console.debug('useEffect')
   }, [statusBarElement]) 
 
+  /**
+   * Aka componentDidMount
+   */
+  useEffect(() => {
+    const {display} = router.query
 
+    getDisplay(display)
+      .then((display) =>{
+        console.debug('Display : ', display)
+        setDisplay(display)
+      } )
+ 
+    getWidgets(display)
+      .then((widgets) => {
+        setWidgets(widgets)
+      })
+  },[router.query])
   
   const layout = widgets.map(widget => ({
     i: widget._id,
@@ -67,32 +86,21 @@ function Layout(props) {
     h: widget.h || 1
   }))
 
-  const display = displaysDB[0]
-/** TODO : React.useEffect()
-  componentDidMount() {
-    //const { displayId } = this.props
-    const displayId = this.props.router.query.display
-    console.log(displayId)
-    display.setId(displayId)
-    getWidgets(displayId).then(widgets => {
-      this.setState({ widgets })
-    })
-  }
-
+/**
   componentDidUpdate(prevProps) {
     if (prevProps.router.query.display != this.props.router.query.display) this.refresh()
   }
 */
   const refresh = async () => {
-    const widgets = widgetsDB //await getWidgets(display.id)
+    const widgets = await getWidgets(display.id)
     console.debug('refresh')
     setWidgets(widgets)
   }
 
   const addWidget = async type => {
     const widgetDefinition = Widgets[type]
-    //const result = await addWidget(display.id, type, widgetDefinition && widgetDefinition.defaultData)
-    const result = widgetDefinition
+    const result = await addWidget(display.id, type, widgetDefinition && widgetDefinition.defaultData)
+    //const result = widgetDefinition
     console.log('addWidget : ', result)
     return refresh(result)
   }
@@ -207,7 +215,17 @@ function Layout(props) {
             icon: Widgets[widget].icon
           }))}>
         </BasicMenu>
-{/** 
+
+        <FormControlLabel 
+          control={<Switch
+            checked={display.layout =='spaced'}
+            label={t('layout.compact')}
+            onChange={(name, checked) => display.updateLayout(checked ? 'spaced' : 'compact')}
+          />} 
+          label={t('layout.compact')} 
+        />
+      
+{/**  
         <Form>
           <Switch
             checkedLabel={t('layout.compact')}
@@ -222,10 +240,12 @@ function Layout(props) {
       </div>
       <div className='layout'>  
         <GridLayoutWithWidth
+          isResizable= {true}
+          resizeHandles={['se', 'n']}
           layout={layout}
           cols={6}
           onLayoutChange={onLayoutChange}
-          draggableCancel={'.ReactModalPortal,.controls'}
+          draggableCancel={'.MuiDialog-root, .controls'}
           margin={display.layout == 'spaced' ? [12, 12] : [4, 4]}
         >
           {widgets.map(widget => (
@@ -306,14 +326,18 @@ function Layout(props) {
 }
 
 // or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
-export async function getStaticProps({ locale }) {
+export async function getServerSideProps(ctx) {
+  const id = ctx.query.display
+  const data = await getDisplay(id)
   return {
     props: {
-      ...(await serverSideTranslations(locale, [
+      ...(await serverSideTranslations(ctx.locale, [
         'common'
       ])),
+      display: data,
       // Will be passed to the page component as props
     },
+    
   }
 }
 

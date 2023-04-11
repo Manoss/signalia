@@ -38,8 +38,6 @@ const updateSlideshowThrottled = _.debounce((id, data) => {
 function Slideshow(props) { 
   const dialog = createRef(null)
   const [slideshow, setSlideshow] = useState(props.slideshow)
-  const handleOpen = React.useCallback(() => dialog.current?.open(), [])
-  const [open, setOpen] = useState(false)
   const slideList = createRef()
   const router = useRouter()
   const Session = useSession()
@@ -54,7 +52,7 @@ function Slideshow(props) {
     console.log('displayId : ', displayId)
     //display.setId(displayId)
 
-  },[])
+  })
   /**
   componentDidMount() {
     //const { displayId } = this.props
@@ -82,8 +80,7 @@ function Slideshow(props) {
   }
 
   const openAddDialog = () => {
-    //return handleOpen()
-    return Promise.resolve(dialog && dialog.current?.open())
+    return Promise.resolve(dialog && dialog.current.open())
   }
 
   return (
@@ -133,7 +130,7 @@ function Slideshow(props) {
           <SlideEditDialog
             slideshow={slideshow && slideshow._id}
             refresh={refresh}
-            ref={e => dialog.current = e}
+            ref={dialog}
           />
           <Button 
             variant="contained"

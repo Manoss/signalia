@@ -7,7 +7,7 @@ import React from 'react'
 import Link from 'next/link'
 //import { view } from '@risingstack/react-easy-state'
 
-//import { deleteDisplay } from '../../actions/display'
+import { deleteDisplay } from '@/lib/actions/display';
 
 import Icon from '@mui/material/Icon';
 
@@ -29,7 +29,7 @@ function ScreenCard(props) {
               <div className='icon'>
               <Icon fontSize="small">widgets</Icon>
               </div>
-              <span className='text'>{value.widgets.length} widgets</span>
+              <span className='text'>{value.widgets?.length} widgets</span>
             </div>
             <div className='clientnum'>
               <div className='icon'>

@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react'
+import React, {createRef, useEffect} from 'react'
 import Icon from '@mui/material/Icon';
 /**
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -26,16 +26,15 @@ import Widgets from '../../lib/widgets'
 import WidgetEditDialog from './WidgetEditDialog'
 
 function EditableWidget(props) {
-  const dialogRef = useRef()
+  const dialog = createRef(null)
   const { type = 'slideshow', id, layout = 'spaced' } = props
   const widget = Widgets[type] || {}
   //const dialog = () => dialogRef.current()
-  console.debug('props : ', dialogRef)
+
 
   const open = e => {
     if (e) e.stopPropagation()
-    console.log('Open : ', dialogRef.current, ' e ', e)
-    dialogRef && dialogRef.current.open()
+    dialog && dialog.current.open()
   }
 
   const deleteClicked = e => {
@@ -67,7 +66,7 @@ function EditableWidget(props) {
         </div>
         <span className={'type'}>{widget.name || 'Broken Widget'}</span>
       </div>
-      <WidgetEditDialog dialogRef={dialogRef} OptionsComponent={widget.Options} id={id} />
+      <WidgetEditDialog ref={dialog} OptionsComponent={widget.Options} id={id} />
       <style jsx>
         {`
           .widget {

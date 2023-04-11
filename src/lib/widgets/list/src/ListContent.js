@@ -17,6 +17,7 @@ class ListContent extends Component {
     const {
       data: { title, textColor = DEFAULT_TEXT_COLOR, color = DEFAULT_COLOR, list } = {}
     } = this.props
+    console.debug('ListContent : ', this.props)
     return (
       <div className='listWidget'>
         {title && (

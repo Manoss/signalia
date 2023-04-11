@@ -1,25 +1,30 @@
-import React from 'react'
-//import ContentLoader from 'react-content-loader'
+import React, {useEffect, forwardRef, useState, useImperativeHandle} from 'react'
+import ContentLoader from 'react-content-loader'
 
 import ScreenCard from './ScreenCard'
 
-import displays from '../../lib/db-fictive/displays'
+//import displays from '../../lib/db-fictive/displays'
 
-//import { getDisplays } from '../../actions/display'
+import { getDisplays } from '../../lib/actions/display'
+//mUI
+import { Skeleton } from '@mui/material'
 
-function ScreenList(props) {
-  const [screens, setScreens] = React.useState(displays)
+const ScreenList = forwardRef(function ScreenList(props, ref) {
+  const [screens, setScreens] = React.useState([])
 
-/**
-  componentDidMount() {
+  useImperativeHandle(ref, () => ({
+    refresh: refresh
+  }))
+
+  useEffect(()=> {
     refresh()
-  }
-*/
+  },[])
+
   const refresh = async () => {
-    getDisplays().then(screens => {
-      setScreens(screens)
-    })
+    const displays = await getDisplays()
+    setScreens(displays.data) 
   }
+  
   return (
     <div className={'list'}>
       {screens
@@ -34,11 +39,7 @@ function ScreenList(props) {
         : Array(4)
             .fill()
             .map((index) => (
-              {/**
-              <ContentLoader key={index}  height={120} width={640}>
-                <rect x='0' y='0' rx='5' ry='5' width='100%' height='80' />
-              </ContentLoader>
-              */}
+              <div key={index} />
             ))}
       <style jsx>
         {`
@@ -49,7 +50,5 @@ function ScreenList(props) {
       </style>
     </div>
   )
-}
-
-
+})
 export default ScreenList
