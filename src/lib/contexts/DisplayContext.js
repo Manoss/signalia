@@ -11,7 +11,7 @@ export const ContextProvider = ({ children }) => {
 
     const updateDisplayThrottled = _.debounce((id, data) => {
       console.log('Throttled : ', id, ' data : ', data, ' Display : ', displayCtx)
-        return DisplayActions.updateDisplay(id, data)
+        return DisplayActions.updateDisplay(id, data).then(display => setDisplayCtx(display))
       }, 300)
 
     const displayInitial = {
@@ -88,7 +88,10 @@ export const ContextProvider = ({ children }) => {
         setIdCtx,
         setNameCtx,
         updateNameCtx,
-        updateLayoutCtx
+        updateLayoutCtx,
+        addStatusBarItemCtx,
+        removeStatusBarItemCtx,
+        reorderStatusBarItemsCtx
       }}
     >
       {children}

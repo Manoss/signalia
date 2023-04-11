@@ -65,7 +65,7 @@ export default async function handler(req, res) {
           if ('statusBar' in req.body) display.statusBar = req.body.statusBar
           
           await display.save()
-          res.status(200).json({ success: true })
+          res.status(200).json(display)
         } catch (error) {
           res.status(400).json(new Error(error))
         }

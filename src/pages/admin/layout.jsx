@@ -4,7 +4,7 @@ import GridLayout from 'react-grid-layout'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 //import { view } from '@risingstack/react-easy-state'
-import { useStateContext } from '@/lib/contexts/DisplayContext'
+import { useStateContext } from '../../lib/contexts/displayContext'
 
 // i18next
 import { useTranslation } from 'next-i18next'
@@ -203,7 +203,7 @@ function Layout(props) {
         <Typography>{t('layout.compact')}</Typography>
         <Switch
             checked={displayCtx.layout =='spaced'}
-            onChange={(name, checked) => {updateLayoutCtx(checked ? 'spaced' : 'compact'); refresh()}}
+            onChange={(name, checked) => updateLayoutCtx(checked ? 'spaced' : 'compact')}
           />
         <Typography>{t('layout.spaced')}</Typography>
       </Stack>
