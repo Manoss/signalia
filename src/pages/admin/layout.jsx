@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState } from 'react'
 
 import GridLayout from 'react-grid-layout'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 //import { view } from '@risingstack/react-easy-state'
+import { useStateContext } from '@/lib/contexts/DisplayContext'
 
 // i18next
 import { useTranslation } from 'next-i18next'
@@ -28,12 +29,10 @@ import { useRouter } from 'next/router.js'
 
 //import { display } from '../stores'
 import { getDisplay } from '@/lib/actions/display'
-//import displaysDB from '../../lib/db-fictive/displays'
-//import widgetsDB from '../../lib/db-fictive/widgets'
 
 import Icon from '@mui/material/Icon';
 import BasicMenu from '@/components/Menu'
-import {Switch, FormControlLabel} from '@mui/material'
+import {Switch, Typography, Stack} from '@mui/material'
 
 import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
 
@@ -41,6 +40,7 @@ import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
 
 function Layout(props) {
   const GridLayoutWithWidth = WidthProvider(GridLayout)
+  const { displayCtx, setDisplayCtx, updateLayoutCtx } = useStateContext();
   const router = useRouter()
   const [display,setDisplay] = useState(props.display || null)
   const [statusBarElement, setStatusBarElement] = useState(StatusBarElementTypes)
@@ -49,28 +49,21 @@ function Layout(props) {
   const Session = useSession()
   const loggedIn = Session.status ==='authenticated'
   
-  useEffect(() => {
-    //setWidgets()
-    /**
-    async function fetchData() {
-      setStatusBarElement(await StatusBarElementTypes)
-    }
-    fetchData
-    */
-    console.debug('useEffect')
-  }, [statusBarElement]) 
-
   /**
    * Aka componentDidMount
    */
   useEffect(() => {
-    const {display} = router.query
-
+    //const {display} = router.query
+    
+    setDisplayCtx(props.display)
+    console.log('Display Ctx : ', displayCtx)
+    setWidgets(props.display.widgets)
+    /** 
     getWidgets(display)
       .then((widgets) => {
         setWidgets(widgets)
-      })
-  },[router.query])
+      })*/
+  },[])
   
   const layout = widgets.map(widget => ({
     i: widget._id,
@@ -86,14 +79,14 @@ function Layout(props) {
   }
 */
   const refresh = async () => {
-    const widgets = await getWidgets(display._id)
+    const widgets = await getWidgets(displayCtx._id)
     console.debug('refresh')
     setWidgets(widgets)
   }
 
   const addWidget = async(type) => {
     const widgetDefinition = Widgets[type]
-    const result = await addWidgetApi(display._id, type, widgetDefinition && widgetDefinition.defaultData)
+    const result = await addWidgetApi(displayCtx._id, type, widgetDefinition && widgetDefinition.defaultData)
     return refresh(result)
   }
 
@@ -104,14 +97,13 @@ function Layout(props) {
 
   const onLayoutChange = layout => {
     for (const widget of layout) {
-      console.log('on LayoutChange : ', widget)
-      /**
+      console.log('on LayoutChange : ', widget, ' Display Ctx : ', displayCtx) 
       updateWidgetApi(widget.i, {
         x: widget.x,
         y: widget.y,
         w: widget.w,
         h: widget.h
-      })*/
+      })
     }
   }
 
@@ -130,7 +122,7 @@ function Layout(props) {
           <input
             className='input'
             placeholder={t('layout.title.placeholder')}
-            value={display && display.name || 'display name'}
+            value={displayCtx && displayCtx.name || 'display name'}
             onChange={event => {
               const target = event.target
               const title = target && target.value
@@ -207,15 +199,16 @@ function Layout(props) {
             icon: Widgets[widget].icon
           }))}>
         </BasicMenu>
+        <Stack direction="row" spacing={1} alignItems="center">
+        <Typography>{t('layout.compact')}</Typography>
+        <Switch
+            checked={displayCtx.layout =='spaced'}
+            onChange={(name, checked) => {updateLayoutCtx(checked ? 'spaced' : 'compact'); refresh()}}
+          />
+        <Typography>{t('layout.spaced')}</Typography>
+      </Stack>
 
-        <FormControlLabel 
-          control={<Switch
-            checked={display.layout =='spaced'}
-            label={t('layout.compact')}
-            onChange={(name, checked) => display.updateLayout(checked ? 'spaced' : 'compact')}
-          />} 
-          label={t('layout.compact')} 
-        />
+
       
 {/**  
         <Form>
@@ -236,7 +229,7 @@ function Layout(props) {
           cols={6}
           onLayoutChange={onLayoutChange}
           draggableCancel={'.MuiDialog-root, .controls'}
-          margin={display.layout == 'spaced' ? [12, 12] : [4, 4]}
+          margin={displayCtx.layout == 'spaced' ? [12, 12] : [4, 4]}
         >
           {widgets.map(widget => (
             <div key={widget._id}>
@@ -244,12 +237,11 @@ function Layout(props) {
                 id={widget._id}
                 type={widget.type}
                 onDelete={deleteWidget.bind(this, widget._id)}
-                layout={display.layout}
+                layout={displayCtx.layout}
               />
             </div>
           ))}
         </GridLayoutWithWidth>
-      
       </div>
       <style jsx>
         {`
@@ -269,7 +261,7 @@ function Layout(props) {
           }
           .layout {
             background: #dfdfdf;
-            border-radius: ${display.layout == 'spaced' ? '8px' : '0px'};
+            border-radius: ${displayCtx.layout == 'spaced' ? '8px' : '0px'};
           }
           .statusbar {
             background: #dfdfdf;
@@ -319,6 +311,7 @@ function Layout(props) {
 export async function getServerSideProps(ctx) {
   const id = ctx.query.display
   const host = 'http://' + ctx.req.headers.host
+  //Fetch data from display id to props and store in useContext
   const data = await getDisplay(id, host)
   return {
     props: {

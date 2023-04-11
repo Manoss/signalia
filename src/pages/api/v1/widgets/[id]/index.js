@@ -50,16 +50,23 @@ export default async function handler(req, res) {
 
     case 'PUT' /* Edit a model by its ID */:
       try {
-        const display = await Display.findByIdAndUpdate(id, req.body, {
-          new: true,
-          runValidators: true,
-        })
-        if (!display) {
-          return res.status(400).json({ success: false })
+        const widget = await Widget.findById(id)
+        if(!widget) {
+          res.status(400).json(new Error('Widget not found'))
         }
-        res.status(200).json({ success: true, data: display })
+        const data = req.body
+        if(!data.data) {   
+          widget.x = data.x
+          widget.y = data.y
+          widget.w = data.w
+          widget.h = data.h
+        } else {
+          widget.data = data.data
+        }
+        await widget.save()
+        res.status(200).json({ success: true})
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json(new Error(error))
       }
       break
 

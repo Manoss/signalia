@@ -1,6 +1,9 @@
 import '@/styles/globals.css'
+import '@/styles/GridLayoutStyles.css'
+import 'react-resizable/css/styles.css' // Search usage
 import { SessionProvider } from "next-auth/react"
 import { appWithTranslation } from 'next-i18next'
+import { ContextProvider } from '@/lib/contexts/DisplayContext'
 
 function App({ 
   Component, 
@@ -10,8 +13,10 @@ function App({
   } }) {
   return (
   <>
-    <SessionProvider session={session}>  
-      <Component {...pageProps} />
+    <SessionProvider session={session}>
+      <ContextProvider>  
+        <Component {...pageProps} />
+      </ContextProvider>
     </SessionProvider>
   </>
   )

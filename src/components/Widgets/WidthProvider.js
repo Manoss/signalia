@@ -1,5 +1,5 @@
 import ReactDOM from 'react-dom'
-import React from 'react'
+import React, { createRef } from 'react'
 
 /*
  * A simple HOC that provides facility for listening to container resizes.
@@ -14,6 +14,8 @@ export default function WidthProvider(ComposedComponent) {
 
       this.mounted = false
     }
+
+    nodeRef = createRef(null);
 
     componentDidMount() {
       this.mounted = true
@@ -31,6 +33,7 @@ export default function WidthProvider(ComposedComponent) {
       if (!this.mounted) return
       // eslint-disable-next-line
       const node = ReactDOM.findDOMNode(this) // Flow casts this to Text | Element
+      //const node = this.nodeRef.current
       if (node instanceof HTMLElement) this.setState({ width: node.offsetWidth })
     }
 

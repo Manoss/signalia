@@ -34,6 +34,7 @@ export const deleteDisplay = async (id, host = '') => {
 }
 
 export const updateDisplay = async (id, data, host = '') => {
+  console.log('Update display : ', id, 'data : ', data, 'host :', host)
   return axios.patch(host + '/api/v1/display/' + id, data).then(res => {
     if (res && res.data) {
       return res.data

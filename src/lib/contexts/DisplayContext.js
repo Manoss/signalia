@@ -10,6 +10,7 @@ const StateContext = createContext();
 export const ContextProvider = ({ children }) => {
 
     const updateDisplayThrottled = _.debounce((id, data) => {
+      console.log('Throttled : ', id, ' data : ', data, ' Display : ', displayCtx)
         return DisplayActions.updateDisplay(id, data)
       }, 300)
 
@@ -19,6 +20,7 @@ export const ContextProvider = ({ children }) => {
         layout: null,
         statusBar: null,
         widgets: null,
+        /**
         setId,
         setName,
         updateName,
@@ -26,79 +28,67 @@ export const ContextProvider = ({ children }) => {
         addStatusBarItem,
         removeStatusBarItem,
         reorderStatusBarItems
+        */
     }
 
-    const [display, setDisplay] = useState(displayInitial);
+    const [displayCtx, setDisplayCtx] = useState(displayInitial);
 
-    const setId = async(id) => {
+    const setIdCtx = async(id) => {
         if (!id) return
-        display.id = id
+        displayCtx._id = id
         const displayInfo = await DisplayActions.getDisplay(id)
-        display.layout = displayInfo.layout
-        display.statusBar = displayInfo.statusBar
-        display.name = displayInfo.name
-        display.widgets = displayInfo.widgets
+        displayCtx.layout = displayInfo.layout
+        displayCtx.statusBar = displayInfo.statusBar
+        displayCtx.name = displayInfo.name
+        displayCtx.widgets = displayInfo.widgets
     }
 
-    const setName = async (name) => {
+    const setNameCtx = async (name) => {
         if (!name) return
-        display.name = name
+        displayCtx.name = name
     }
 
-    const updateName = async (name) => {
+    const updateNameCtx = async (name) => {
         if (!name) return
-        display.name = name
-        updateDisplayThrottled(display.id, { name })
+        displayCtx.name = name
+        updateDisplayThrottled(displayCtx._id, { name })
     }
 
-    const updateLayout = async(layout) => {
+    const updateLayoutCtx = async(layout) => {
         if (!layout || !['spaced', 'compact'].includes(layout)) return
-        display.layout = layout
-        updateDisplayThrottled(display.id, { layout })
+        displayCtx.layout = layout
+        updateDisplayThrottled(displayCtx._id, { layout })
     }
 
-    const addStatusBarItem = async(type) => {
-        display.statusBar = [...display.statusBar, type + '_' + shortid.generate()]
-        updateDisplayThrottled(display.id, { statusBar: display.statusBar })
+    const addStatusBarItemCtx = async(type) => {
+      displayCtx.statusBar = [...displayCtx.statusBar, type + '_' + shortid.generate()]
+        updateDisplayThrottled(displayCtx._id, { statusBar: displayCtx.statusBar })
         return Promise.resolve()
     }
 
-    const removeStatusBarItem = async(id) => {
-        display.statusBar = [...display.statusBar.slice(0, id).concat(display.statusBar.slice(id + 1))]
-        updateDisplayThrottled(display.id, { statusBar: display.statusBar })
+    const removeStatusBarItemCtx = async(id) => {
+      displayCtx.statusBar = [...displayCtx.statusBar.slice(0, id).concat(display.statusBar.slice(id + 1))]
+        updateDisplayThrottled(displayCtx.id, { statusBar: displayCtx.statusBar })
     }
 
-    const reorderStatusBarItems = async(startIndex, endIndex) => {
-        const result = Array.from(display.statusBar)
+    const reorderStatusBarItemsCtx = async(startIndex, endIndex) => {
+        const result = Array.from(displayCtx.statusBar)
         const [removed] = result.splice(startIndex, 1)
         result.splice(endIndex, 0, removed)
 
-        display.statusBar = result
-        updateDisplayThrottled(display.id, { statusBar: display.statusBar })
+        displayCtx.statusBar = result
+        updateDisplayThrottled(displayCtx.id, { statusBar: displayCtx.statusBar })
     }
 
   return (
     <StateContext.Provider
       value={{
-        audio,
-        setAudio,
-        activeMenu,
-        setActiveMenu,
-        isClicked,
-        screenSize,
-        homePlayerToggle,
-        currentSong,
-        setcurrentSong,
-        setHomePlayerToggle,
-        setScreenSize,
-        initialState,
-        setIsClicked,
-        handleClick,
-        topCharts,
-        setTopCharts,
-        isFetching,
-        setIsFetching,
-        topTrending,
+        displayCtx,
+        setDisplayCtx,
+        setIdCtx,
+        setNameCtx,
+        updateNameCtx,
+        updateLayoutCtx
       }}
     >
       {children}

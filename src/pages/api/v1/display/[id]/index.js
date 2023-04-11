@@ -44,13 +44,32 @@ export default async function handler(req, res) {
           runValidators: true,
         })
         if (!display) {
-          return res.status(400).json({ success: false })
+          res.status(400).json({ success: false })
         }
         res.status(200).json({ success: true, data: display })
       } catch (error) {
         res.status(400).json({ success: false })
       }
       break
+
+      case 'PATCH' /* Edit a model by its ID */:
+        console.log('PATCH')
+        try {
+          const display = await Display.findById(id)
+          if(!display) {
+            res.status(400).json(new Error('Display not found'))
+          }
+
+          if ('name' in req.body) display.name = req.body.name
+          if ('layout' in req.body) display.layout = req.body.layout
+          if ('statusBar' in req.body) display.statusBar = req.body.statusBar
+          
+          await display.save()
+          res.status(200).json({ success: true })
+        } catch (error) {
+          res.status(400).json(new Error(error))
+        }
+        break
 
     case 'DELETE' /* Delete a model by its ID */:
       try {
