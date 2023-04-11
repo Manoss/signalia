@@ -71,7 +71,7 @@ const WidgetEditDialog = forwardRef(function WidgetEditDialog(props, ref) {
 
   return (
     <Dialog 
-    fullWidth={'true'}
+    fullWidth={true}
     maxWidth={'md'}
     sx={{ m: 0, p: 2}} 
     ref= {dialog} 

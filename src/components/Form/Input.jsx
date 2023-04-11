@@ -20,7 +20,7 @@ function Input(props) {
     const { value } = props
     const [state, setState] = useState(value)
     const {
-      label,
+      label = '',
       inline = true,
       expand = true,
       type = 'text',
@@ -28,7 +28,7 @@ function Input(props) {
       choices = [],
       disabled = false,
       onKeyDown = () => {},
-      className
+      className = ''
     } = props
 /**
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -39,8 +39,8 @@ function Input(props) {
 */
 
   useEffect((e) => {
-    console.debug('On change useEffect', state)
-  }),[state]
+    console.debug('On change useEffect', e)
+  }),[]
 
   const handleInputChange = event => {
     console.debug('handleInputChange : ', event.target.value)

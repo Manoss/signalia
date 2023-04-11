@@ -20,6 +20,7 @@ function BasicMenu(props) {
   const handleChoice = (event, choice) => {
     onSelect(choice.key)
     console.log('handleChoice : ', event, ' Choice : ', choice)
+    setAnchorEl(null)
   }
   const title = props.title || ''
   const choices = [] = props.choices || []

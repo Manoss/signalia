@@ -16,6 +16,7 @@ export const addDisplay = async (host = '') => {
 }
 
 export const getDisplay = async (id, host = '') => {
+  console.debug('Host GetDisplay : ', host)
   return axios.get(host + '/api/v1/display/' + id).then(res => {
     if (res && res.data) {
       return res.data

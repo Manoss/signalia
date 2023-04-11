@@ -1,6 +1,7 @@
 import dbConnect from '../../../../../lib/db/dbConnect'
+import Widget from '../../../../../lib/api/models/Widget'
 import Display from '../../../../../lib/api/models/Display'
-const DisplayHelper = require('../../../../../lib/api/helpers/display_helper')
+const WidgetHelper = require('../../../../../lib/api/helpers/widget_helper')
 
 /**
  * Route : /api/v1/widget/:id
@@ -18,6 +19,9 @@ export default async function handler(req, res) {
   await dbConnect()
 
   switch (method) {
+    /**
+     * Used
+     */
     case 'GET' /* Get a model by its ID */:
       try {
         //const { id } = req.params
@@ -59,17 +63,24 @@ export default async function handler(req, res) {
       }
       break
 
+      /**
+       * Used
+       */
     case 'DELETE' /* Delete a model by its ID */:
       try {
-        const deleteDisplay = await Display.findByIdAndDelete(id)
-        if (!deleteDisplay) {
-          res.status(400).json({ success: false })
+        const widget = await Widget.findByIdAndDelete(id)
+        if (!widget) {
+          res.status(400).json(new Error('Widget not found'))
         }
-        const deleteWidgets = await DisplayHelper.deleteWidgets(deleteDisplay.widgets, res)
-        res.status(200).json({ success: true })
+        const display = await Display.findById(widget.display)
+        if(!display) {
+          res.status(400).json(new Error('Display not found'))
+        }
+        await display.widgets.pull(widget._id)
+        await display.save()
+        res.status(200).json({success: true})
       } catch (error) {
-        console.debug('Error : ', error)
-        res.status(400).json({ success: false })
+        res.status(400).json(error)
       }
       break
 

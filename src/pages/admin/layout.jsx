@@ -21,7 +21,7 @@ import DropdownButton from '../../components/DropdownButton'
 
 import Widgets from '../../lib/widgets'
 
-import { addWidget, getWidgets, deleteWidget, updateWidget } from '../../lib/actions/widgets'
+import { addWidgetApi, getWidgets, deleteWidgetApi, updateWidgetApi } from '../../lib/actions/widgets'
 
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/router.js'
@@ -42,8 +42,8 @@ import StatusBarElementTypes from '../../lib/helpers/statusbar.json'
 function Layout(props) {
   const GridLayoutWithWidth = WidthProvider(GridLayout)
   const router = useRouter()
-  const [display,setDisplay] = useState(null)
-  const [statusBarElement, setStatusBarElement] = React.useState(StatusBarElementTypes)
+  const [display,setDisplay] = useState(props.display || null)
+  const [statusBarElement, setStatusBarElement] = useState(StatusBarElementTypes)
   const [widgets, setWidgets] = React.useState(props.widgets || [])
   const { t } = useTranslation()
   const Session = useSession()
@@ -66,12 +66,6 @@ function Layout(props) {
   useEffect(() => {
     const {display} = router.query
 
-    getDisplay(display)
-      .then((display) =>{
-        console.debug('Display : ', display)
-        setDisplay(display)
-      } )
- 
     getWidgets(display)
       .then((widgets) => {
         setWidgets(widgets)
@@ -92,29 +86,27 @@ function Layout(props) {
   }
 */
   const refresh = async () => {
-    const widgets = await getWidgets(display.id)
+    const widgets = await getWidgets(display._id)
     console.debug('refresh')
     setWidgets(widgets)
   }
 
-  const addWidget = async type => {
+  const addWidget = async(type) => {
     const widgetDefinition = Widgets[type]
-    const result = await addWidget(display.id, type, widgetDefinition && widgetDefinition.defaultData)
-    //const result = widgetDefinition
-    console.log('addWidget : ', result)
+    const result = await addWidgetApi(display._id, type, widgetDefinition && widgetDefinition.defaultData)
     return refresh(result)
   }
 
-  const deleteWidget = async id => {
-    const result = id //await deleteWidget(id)
+  const deleteWidget = async(id) => {
+    const result = await deleteWidgetApi(id)
     return refresh(result)
   }
 
   const onLayoutChange = layout => {
     for (const widget of layout) {
       console.log('on LayoutChange : ', widget)
-      /** 
-      updateWidget(widget.i, {
+      /**
+      updateWidgetApi(widget.i, {
         x: widget.x,
         y: widget.y,
         w: widget.w,
@@ -240,8 +232,6 @@ function Layout(props) {
       </div>
       <div className='layout'>  
         <GridLayoutWithWidth
-          isResizable= {true}
-          resizeHandles={['se', 'n']}
           layout={layout}
           cols={6}
           onLayoutChange={onLayoutChange}
@@ -328,7 +318,8 @@ function Layout(props) {
 // or getServerSideProps: GetServerSideProps<Props> = async ({ locale })
 export async function getServerSideProps(ctx) {
   const id = ctx.query.display
-  const data = await getDisplay(id)
+  const host = 'http://' + ctx.req.headers.host
+  const data = await getDisplay(id, host)
   return {
     props: {
       ...(await serverSideTranslations(ctx.locale, [

@@ -5,7 +5,8 @@ const nextConfig = {
   reactStrictMode: true,
   i18n,
   env: {
-    MONGODB_URI: 'mongodb://127.0.0.1:27017/digitaldisplay'
+    MONGODB_URI: 'mongodb://127.0.0.1:27017/digitaldisplay',
+    HOST: 'http://localhost:3000'
   }
 }
 

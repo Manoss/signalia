@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-//import { Form, Input, InlineInputGroup } from '../../../components/Form'
+import { Form, Input, InlineInputGroup } from '../../../../components/Form/'
 
 import AnnouncementContent from './AnnouncementContent'
 

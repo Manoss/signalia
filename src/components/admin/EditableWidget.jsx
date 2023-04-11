@@ -43,13 +43,6 @@ function EditableWidget(props) {
     onDelete()
   }
 
-  // HeaderComponent
-
-  const handleNext = () => {
-    const dialogInstance = dialog.current.getInstance();
-    dialogInstance.next()
-  }
-
   return (
     <div className={'widget'}>
       <div className={'controls'}>

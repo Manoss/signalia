@@ -9,7 +9,6 @@ import Lottie from 'lottie-react'
 //import { config } from '@fortawesome/fontawesome-svg-core'
 import AutoScroll from '../../../../components/AutoScroll'
 
-
 //config.autoAddCss = false
 
 const DEFAULT_COLOR = '#34495e'
@@ -23,11 +22,13 @@ function CongratsContent(props) {
       data: {
         text = DEFAULT_TEXT,
         textColor = DEFAULT_TEXT_COLOR,
-        animation = DEFAULT_ANIMATION,
+        animation = DEFAULT_ANIMATION ,
         fontSize = DEFAULT_FONT_SIZE,
         color = DEFAULT_COLOR
       } = {}
     } = props
+
+    console.debug('Congrats : ',)
   return (
     <div className='congrats'>
       <div className='background'>

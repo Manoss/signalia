@@ -10,7 +10,7 @@ import { getDisplays } from '../../lib/actions/display'
 import { Skeleton } from '@mui/material'
 
 const ScreenList = forwardRef(function ScreenList(props, ref) {
-  const [screens, setScreens] = React.useState([])
+  const [screens, setScreens] = useState([])
 
   useImperativeHandle(ref, () => ({
     refresh: refresh
@@ -22,7 +22,7 @@ const ScreenList = forwardRef(function ScreenList(props, ref) {
 
   const refresh = async () => {
     const displays = await getDisplays()
-    setScreens(displays.data) 
+    setScreens(displays) 
   }
   
   return (
@@ -39,7 +39,9 @@ const ScreenList = forwardRef(function ScreenList(props, ref) {
         : Array(4)
             .fill()
             .map((index) => (
-              <div key={index} />
+              <ContentLoader key={index}  height={120} width={640}>
+                <rect x='0' y='0' rx='5' ry='5' width='100%' height='80' />
+              </ContentLoader>
             ))}
       <style jsx>
         {`

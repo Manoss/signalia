@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-//import { Form, Input, InlineInputGroup } from '../../../components/Form'
+import React, { Component, useState } from 'react'
+import { Form, Input, InlineInputGroup } from '../../../../components/Form'
 
 import CongratsContent from './CongratsContent'
 
 function CongratsOptions(props) {
-  //const { animation, text, fontSize, color, textColor } = props.data || {}
-  const [state, setState] = React.useState({
-    animation:'',
-    text:'',
-    color:'',
-    fontSize:'',
-    textColor:''
+  const { animation, text, fontSize, color, textColor } = props.data || {}
+  const [state, setState] = useState({
+    animation: animation,
+    text: text,
+    color: color,
+    fontSize: fontSize,
+    textColor: textColor
   })
 
   const handleChange = (name, value) => {
