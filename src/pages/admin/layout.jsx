@@ -4,7 +4,7 @@ import GridLayout from 'react-grid-layout'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 
 //import { view } from '@risingstack/react-easy-state'
-import { useStateContext } from '../../lib/contexts/displayContext'
+import { useStateContext } from '../../lib/contexts/DisplayContext'
 
 // i18next
 import { useTranslation } from 'next-i18next'
