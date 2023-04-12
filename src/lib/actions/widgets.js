@@ -22,10 +22,11 @@ export const deleteWidgetApi = async(id, host = '') => {
 }
 
 export const updateWidgetApi = async(id, data, host = '') => {
+  console.debug('updateWidgetApi : ', id, data, host )
   return axios.put(host + '/api/v1/widgets/' + id, data)
 }
 
-export const getWidget = async(id, host = '') => {
+export const getWidgetApi = async(id, host = '') => {
   return axios.get(host + '/api/v1/widgets/' + id).then(res => {
     if (res && res.data) {
       return res.data

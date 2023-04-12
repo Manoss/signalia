@@ -23,6 +23,7 @@ class AnnouncementOptions extends Component {
       },
       () => {
         onChange(this.state)
+        console.debug('handleChange Announcement : ', this.state)
       }
     )
   }

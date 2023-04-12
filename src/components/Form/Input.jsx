@@ -3,8 +3,7 @@ import ColorPicker from './ColorPicker'
 import ContentLoader from 'react-content-loader'
 import dynamic from 'next/dynamic'
 //MUI
-import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
+import {Typography, TextField, MenuItem} from '@mui/material';
 
 const DropzoneWithNoSSR = dynamic(() => import('react-dropzone'), {
   ssr: false,
@@ -17,7 +16,7 @@ const DropzoneWithNoSSR = dynamic(() => import('react-dropzone'), {
 
 function Input(props) {
     console.debug('input props value : ', props)   
-    const { value } = props
+    const [value, setValue] = useState(props.value)
     const [state, setState] = useState(value)
     const {
       label = '',
@@ -38,9 +37,9 @@ function Input(props) {
   }
 */
 
-  useEffect((e) => {
-    console.debug('On change useEffect', e)
-  }),[]
+  useEffect(() => {
+    console.debug('On change useEffect')
+  },[])
 
   const handleInputChange = event => {
     console.debug('handleInputChange : ', event.target.value)
@@ -51,7 +50,7 @@ function Input(props) {
   }
 
   const handleChange = value => {
-    console.debug('Value : ', value)
+    console.debug('HandleChange : ', value, ' Name : ', props.name)
     const { onChange = () => {}, name = '' } = props
     /**
     setValue(
@@ -60,7 +59,8 @@ function Input(props) {
       }
     )
     */
-   setState({...state, [name]:value})
+    onChange(props.name, value)
+    //setState({...state, [props.name]:value})
   }
 
   const handleOnDropAccepted = acceptedFiles => {
@@ -108,7 +108,10 @@ function Input(props) {
           ))}
         </TextField>
       ) : type == 'color' ? (
-        <ColorPicker label={label} color={value} onChange={handleChange} />
+        <>
+          <Typography>{label}</Typography>
+          <ColorPicker label={label} color={value} onChange={handleChange} />
+        </>
       ) : type == 'photo' ? (
         <DropzoneWithNoSSR
           accept='image/*'
@@ -143,7 +146,7 @@ function Input(props) {
           rows={4}
           label={label}
           onChange={handleInputChange}
-          value={value}
+          defaultValue={value}
           helperText={placeholder}
           className={className}
         />
@@ -259,6 +262,5 @@ function Input(props) {
     </div>
   )
 }
-
 
 export default Input

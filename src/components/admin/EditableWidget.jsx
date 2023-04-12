@@ -29,8 +29,6 @@ function EditableWidget(props) {
   const dialog = createRef(null)
   const { type = 'slideshow', id, layout = 'spaced' } = props
   const widget = Widgets[type] || {}
-  //const dialog = () => dialogRef.current()
-
 
   const open = e => {
     if (e) e.stopPropagation()

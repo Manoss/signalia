@@ -18,8 +18,10 @@ function ColorPicker(props)  {
   }
 
   const handleChange = color => {
+    console.debug('handleChange Color : ', color)
     const { onChange = () => {} } = props
     setColor(color.hex)
+    onChange(color.hex)
     /** 
     setColor(
       { color: color.hex }, () => {

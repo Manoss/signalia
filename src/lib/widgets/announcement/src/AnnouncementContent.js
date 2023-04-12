@@ -7,7 +7,7 @@
 import React, { Component } from 'react'
 //import { library, config } from '@fortawesome/fontawesome-svg-core'
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-//import AutoScroll from '../../../components/AutoScroll'
+import AutoScroll from '../../../../components/AutoScroll'
 import Icon from '@mui/material/Icon';
 
 //import { fas } from '@fortawesome/free-solid-svg-icons'
@@ -42,7 +42,7 @@ class AnnouncementContent extends Component {
           </div>
           <span>Announcement</span>
         </div>
-        {/**
+      
         <AutoScroll style={{ display: 'block' }}>
           <div className='text'>
             {text.split('\n').map(line => (
@@ -50,7 +50,7 @@ class AnnouncementContent extends Component {
             ))}
           </div>
         </AutoScroll>
-         */}
+         
         <style jsx>
           {`
             .announce {

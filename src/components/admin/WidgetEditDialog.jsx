@@ -6,8 +6,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Form from '../Form/Form'
 //import { Form, Button, ButtonGroup } from '../Form'
-//import { getWidget, updateWidget } from '../../actions/widgets'
-import widgets from '../../lib/db-fictive/widgets.json'
+import { getWidgetApi, updateWidgetApi } from '../../lib/actions/widgets'
+
 
 import Button from '@mui/material/Button';
 
@@ -15,7 +15,7 @@ const WidgetEditDialog = forwardRef(function WidgetEditDialog(props, ref) {
   const [data, setData] = useState({})
   const [isOpen, setIsOpen] = useState(false)
   const { OptionsComponent = Form } = props
-  const [id, setId] = useState()
+  const [id, setId] = useState(props.id)
   const dialog = createRef(null)
 
   useImperativeHandle(ref, () => ({
@@ -26,26 +26,25 @@ const WidgetEditDialog = forwardRef(function WidgetEditDialog(props, ref) {
   useEffect(() => {
     console.debug('props : ', props)
     getProps()
-  }),[]
+  },[])
 
-  const getProps = () => {
-    setId(props.id)
-    setData(widgets[2].data)
+  const getProps = async () => {
+    const widget = await getWidgetApi(id)
+    console.debug('Save Widget, ID : ', id, ' Widget : ', widget)
+    setData(widget.data)
   }
 
   const open = e => {
     console.debug('Open - e : ', e)
     if (e) e.stopPropagation()
     setIsOpen(true)
-    dialog && dialog.current && dialog.current.open()
+    //dialog && dialog.current && dialog.current.open()
   }
 
   const close = e => {
     if (e) e.stopPropagation()
     setIsOpen(false)
-    return Promise.resolve().then(
-      () => dialog && dialog.current && dialog.current.close()
-    )
+    //dialog && dialog.current && dialog.current.close() 
   }
 
   const handleChange = data => {
@@ -53,8 +52,9 @@ const WidgetEditDialog = forwardRef(function WidgetEditDialog(props, ref) {
     setData(data)
   }
 
-  const saveData = () => {
+  const saveData = async() => {
     console.debug('saveData : ', id, ' data : ', data)
+    await updateWidgetApi(id,{data})
     close()
     /*
     return updateWidget(id, { data }).then(() => {

@@ -25,13 +25,13 @@ export default async function handler(req, res) {
     case 'GET' /* Get a model by its ID */:
       try {
         //const { id } = req.params
-        const widget = await Display.findById(id)
+        const widget = await Widget.findById(id)
         if (!widget) {
-          res.status(400).json({ success: false })
+          res.status(400).json(new Error('Widget not found'))
         }
         res.status(200).json(widget)
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json(new Error(error))
       }
       break
 
@@ -47,8 +47,12 @@ export default async function handler(req, res) {
         res.status(400).json({ success: false })
       }
     break
-
+    
+    /**
+     * Used
+     */
     case 'PUT' /* Edit a model by its ID */:
+      console.debug('PUT widget : ', req.body)
       try {
         const widget = await Widget.findById(id)
         if(!widget) {
