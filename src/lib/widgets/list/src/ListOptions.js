@@ -35,7 +35,7 @@ class ListOptions extends Component {
 
   elementTextChange = (index, value) => {
     const { onChange = () => {} } = this.props
-    this.setState({list: [...this.state.list[index], value]})
+    this.state.list[index].text = value
     this.setState(
       {
         list: this.state.list
@@ -48,7 +48,7 @@ class ListOptions extends Component {
 
   elementLabelChange = (index, value) => {
     const { onChange = () => {} } = this.props
-    this.setState.list[index].label = value
+    this.state.list[index].label = value
     this.setState(
       {
         list: this.state.list
@@ -66,15 +66,12 @@ class ListOptions extends Component {
 
     return Promise.resolve()
   }
+
   deleteEntry = index => {
     const { onChange = () => {} } = this.props
     this.setState(
       {
-        list: this.state.list.filter((el, i) => {
-          console.debug('El : ', el, ' Index : ', i)
-          i != index
-        
-        })
+        list: this.state.list.filter((el, i) => i != index)
       },
       () => {
         onChange(this.state)
@@ -121,7 +118,7 @@ class ListOptions extends Component {
           <span className='subheader'>Element List</span>
           <div className='list'>
             {list.map(({ label, text }, index) => (
-                <InlineInputGroup key={index}>
+                <InlineInputGroup>
                 <Input
                 inline={false}
                 name={index}

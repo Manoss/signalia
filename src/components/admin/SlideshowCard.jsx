@@ -6,31 +6,31 @@ import React from 'react'
 import Link from 'next/link'
 import Icon from '@mui/material/Icon';
 
-//import { deleteSlideshow } from '../../actions/slideshow'
+import { deleteSlideshow } from '../../lib/actions/slideshow'
 //import { display } from '../../stores'
-
-//Test DB off
-import displays from '../../lib/db-fictive/displays.json'
+import {useStateContext}  from '@/lib/contexts/DisplayContext';
 
 function SlideshowCard(props) {
   const { value, refresh = () => {} } = props
-  //Test DB off
-  const display = displays[0]
+  const { displayCtx, setDisplayCtx } = useStateContext()
+
+  const display = displayCtx
 
   return (
-    <Link href={'/admin/slideshow/' + value._id + '?display=' + display.id}>
       <div className='card'>
-        <div className='left'>
-          <div
-            className={'thumbnail'}
-            style={{
-              // backgroundImage: `url(${value.data})`,
-              backgroundColor: 'gray'
-            }}
-          >
-            <Icon fontSize="small">play_arrow</Icon>
+        <Link href={'/admin/slideshow/' + value._id + '?display=' + display.id}>
+          <div className='left'>
+            <div
+              className={'thumbnail'}
+              style={{
+                // backgroundImage: `url(${value.data})`,
+                backgroundColor: 'gray'
+              }}
+            >
+              <Icon fontSize="small">play_arrow</Icon>
+            </div>
           </div>
-        </div>
+        </Link>
         <div className='middle'>
           <div className='title'>{value.title || 'Untitled Slideshow'}</div>
           <div className='info'>
@@ -162,7 +162,6 @@ function SlideshowCard(props) {
           `}
         </style>
       </div>
-    </Link>
   )
 }
 

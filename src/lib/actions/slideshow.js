@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const getSlideshows = (host = '') => {
+export const getSlideshows = async (host = '') => {
   return axios.get(host + '/api/v1/slideshow').then(res => {
     if (res && res.data) {
       return res.data
@@ -8,7 +8,7 @@ export const getSlideshows = (host = '') => {
   })
 }
 
-export const addSlideshow = (host = '') => {
+export const addSlideshow = async (host = '') => {
   return axios.post(host + '/api/v1/slideshow').then(res => {
     if (res && res.data) {
       return res.data
@@ -16,7 +16,7 @@ export const addSlideshow = (host = '') => {
   })
 }
 
-export const getSlideshow = (id, host = '') => {
+export const getSlideshow = async (id, host = '') => {
   return axios.get(host + '/api/v1/slideshow/' + id).then(res => {
     if (res && res.data) {
       return res.data
@@ -24,7 +24,8 @@ export const getSlideshow = (id, host = '') => {
   })
 }
 
-export const deleteSlideshow = (id, host = '') => {
+export const deleteSlideshow = async (id, host = '') => {
+  console.debug('DELETE SLIDESHOW - ID ',id)
   return axios.delete(host + '/api/v1/slideshow/' + id).then(res => {
     if (res && res.data) {
       return res.data
@@ -32,7 +33,7 @@ export const deleteSlideshow = (id, host = '') => {
   })
 }
 
-export const updateSlideshow = (id, data, host = '') => {
+export const updateSlideshow = async(id, data, host = '') => {
   return axios.patch(host + '/api/v1/slideshow/' + id, data).then(res => {
     if (res && res.data) {
       return res.data
@@ -40,7 +41,7 @@ export const updateSlideshow = (id, data, host = '') => {
   })
 }
 
-export const reorderSlides = (id, oldIndex, newIndex, host = '') => {
+export const reorderSlides = async(id, oldIndex, newIndex, host = '') => {
   return axios
     .patch(host + '/api/v1/slideshow/' + id + '/reorder', { oldIndex, newIndex })
     .then(res => {

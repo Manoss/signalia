@@ -14,9 +14,10 @@ import SlideshowList from '../../components/admin/SlideshowList'
 import Button from '@mui/material/Button';
 import Icon from '@mui/material/Icon';
 
-//import { addSlideshow } from '../actions/slideshow'
+import { addSlideshow } from '../../lib/actions/slideshow'
 
 //import { display } from '../stores'
+
 
 import { useRouter } from 'next/router.js'
 import { useSession } from "next-auth/react"
@@ -28,7 +29,7 @@ function Slideshows(props) {
   const { t } = useTranslation()
   const loggedIn = Session.status ==='authenticated'
 
-  const add = () => {
+  const add = async () => {
     return addSlideshow().then(() => {
       slideshowList && slideshowList.current && slideshowList.current.refresh()
     })
@@ -50,7 +51,9 @@ function Slideshows(props) {
         {/**
         <Dialog />*/}
         <Button
+          style={{ marginLeft: 0, width: '100%' }}
           onClick={add}
+          variant="contained"
         >{t('slideshows.button')}</Button>
       </div>
       <style jsx>

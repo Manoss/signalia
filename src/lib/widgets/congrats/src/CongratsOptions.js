@@ -14,7 +14,10 @@ function CongratsOptions(props) {
   })
 
   const handleChange = (name, value) => {
-    const { onChange = () => {} } = this.props
+    const { onChange = () => {} } = props
+    setState({...state, [name]:value})
+    onChange(state)
+    /** 
     setState(
       {
         [name]: value
@@ -22,7 +25,7 @@ function CongratsOptions(props) {
       () => {
         onChange(state)
       }
-    )
+    )*/
   }
 
 

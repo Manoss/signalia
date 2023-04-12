@@ -2,7 +2,7 @@ import React, {useEffect, useState, forwardRef, useImperativeHandle} from 'react
 import _ from 'lodash'
 
 //import Dialog from '../Dialog'
-//import { Form, Input, Button, ButtonGroup } from '../Form'
+import { Input } from '../Form'
 
 //import { getSlide, addSlide, updateSlide } from '../../actions/slide'
 
@@ -130,70 +130,66 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
       <DialogContent>
       <form>
         <div>
-        <TextField
-          select
+        <Input
+          type={'select'}
           name={'type'}
           label={'Slide Type'}
-          defaultValue={type}
+          value={type}
+          choices={choices}
           onChange={handleChange}
-        > {choices.map((choice) => (
-          <MenuItem key={choice.id} value={choice.id}>
-            {choice.label}
-          </MenuItem>
-        ))}</TextField>
+          ></Input>
         </div>
         {type == 'photo' || upload ? (
           <div>
-          <TextField
+          <Input
             type={'photo'}
             label={'Photo'}
             name={'upload'}
-            defaultValue={upload ? upload.preview : data}
+            value={upload ? upload.preview : data}
             onChange={handleChange}
             inline={true}
-          ></TextField>
+          ></Input>
           </div>
         ) : (
           <div>
-          <TextField
+          <Input
             type={'text'}
             label={type == 'web' ? 'Web URL' : type == 'youtube' ? 'Youtube URL' : 'Data'}
             name={'data'}
-            defaultValue={data}
+            value={data}
             onChange={handleChange}
-          ></TextField>
+          ></Input>
           </div>
         )}
         <div>
-        <TextField
+        <Input
           type={'number'}
           label={'Duration'}
           name={'duration'}
-          defaultValue={duration}
-          placeholder={'5'}
+          value={duration}
+          placeholder={'Secondes'}
           onChange={handleChange}
-        ></TextField>
+        ></Input>
         </div>
         <div>
-        <TextField
+        <Input
           type={'text'}
           label={'Title'}
           name={'title'}
-          defaultValue={title}
+          value={title}
           placeholder={'Header title...'}
           onChange={handleChange}
-        ></TextField>
+        ></Input>
         </div>
         <div>
-        <TextField
-          multiline
-          rows={4}
+        <Input
+          type={'textarea'}
           label={'Description'}
           name={'description'}
-          defaultValue={description}
+          value={description}
           placeholder={'Short content description...'}
           onChange={handleChange}
-        ></TextField>
+        ></Input>
         </div>
       </form>
       </DialogContent>

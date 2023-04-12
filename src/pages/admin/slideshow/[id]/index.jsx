@@ -22,11 +22,8 @@ import Dialog from '../../../../components/Dialog'
 
 //import { getSlideshow, updateSlideshow } from '../../../actions/slideshow'
 //import { display } from '../../../stores'
+import { useStateContext } from '@/lib/contexts/DisplayContext'
 
-/**
- * DB fictive - 
- */
-import displays from '../../../../lib/db-fictive/displays.json'
 
 import { useRouter } from 'next/router.js'
 import { useSession } from "next-auth/react"
@@ -36,6 +33,7 @@ const updateSlideshowThrottled = _.debounce((id, data) => {
 }, 300)
 
 function Slideshow(props) { 
+  const { displayCtx, setDisplayCtx } = useStateContext();
   const dialog = createRef(null)
   const [slideshow, setSlideshow] = useState(props.slideshow)
   const slideList = createRef()
@@ -43,12 +41,11 @@ function Slideshow(props) {
   const Session = useSession()
   const { t } = useTranslation()
   const loggedIn = Session.status ==='authenticated'
-  //DB fictive
-  const display = displays[0]
+
 
   useEffect(() => {
     console.log('useEffect dialog : ', dialog.current)
-    const displayId = display._id//router.query.display
+    const displayId = displayCtx._id//router.query.display
     console.log('displayId : ', displayId)
     //display.setId(displayId)
 

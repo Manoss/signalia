@@ -1,16 +1,15 @@
 import { Component } from 'react'
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 //import ContentLoader from 'react-content-loader'
 
 import SlideshowCard from './SlideshowCard'
-import getSlideshows from '../../lib/db-fictive/slideshows.json'
 
-//import { getSlideshows } from '../../actions/slideshow'
+import { getSlideshows } from '../../lib/actions/slideshow'
 
 function SlideshowList(props) {
-  const [slideshows, setSlideshows] = React.useState(null)
+  const [slideshows, setSlideshows] = useState(null)
 
-  React.useEffect(() => {
+  useEffect(() => {
     refresh()
   })
   /**
@@ -18,8 +17,9 @@ function SlideshowList(props) {
     this.refresh()
   }
   */
-  const refresh = () => {
-    setSlideshows(getSlideshows)
+  const refresh = async() => {
+    const slideshows = await getSlideshows()
+    setSlideshows(slideshows)
     /**
     getSlideshows().then(slideshows => {
       setSlideshows(slideshows)

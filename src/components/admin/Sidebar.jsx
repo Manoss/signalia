@@ -26,13 +26,9 @@ import { useTranslation } from 'next-i18next'
 import { signOut } from "next-auth/react"
 import { useSession } from "next-auth/react"
 
-// Simulation DB for UIX test
-import displaysDb from '../../lib/db-fictive/displays'
-
-
 function Sidebar(props) {
-  const display = displaysDb[0]
-  const [displays, setDisplays] = useState(props.displays || [])
+
+  const [display, setDisplay] = useState(props.displays || [])
   const { t } = useTranslation()
   const Session = useSession()
   const router = useRouter()

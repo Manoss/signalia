@@ -5,13 +5,17 @@
 
 
 import Sidebar from './Sidebar'
-import displays from '../../lib/db-fictive/displays.json' 
+//import displays from '../../lib/db-fictive/displays.json' 
 //import { display } from '../../stores'
-const display = displays[0]
+//import { useStateContext } from '../../lib/contexts/DisplayContext'
+//const display = displays[0] display={display.id}
+
+const displayCtx = null
 
 const Frame = props => (
+  
   <div className='container'>
-    <Sidebar loggedIn={props.loggedIn} display={display.id} />
+    <Sidebar loggedIn={props.loggedIn} display={displayCtx} />
     <div className='content'>{props.children}</div>
     <style jsx>
       {`
