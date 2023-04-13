@@ -1,6 +1,9 @@
 import dbConnect from '@/lib/db/dbConnect'
-import Widget from '../../../../lib/api/models/Widget'
+import User from '../../../../lib/api/models/User'
 import Display from '../../../../lib/api/models/Display'
+
+const DisplayHelper = require('../../../../lib/api/helpers/widget_helper')
+const CommonHelper = require('../../../../lib/api/helpers/common_helper')
 
 export default async function handler(req, res) {
   const { method } = req
@@ -10,12 +13,19 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET':
       try {
-        const displays = await Display.find({}).populate('widgets')
-        res.status(200).json({ success: true, data: displays })
+        const { username, password } = req.body
+        const user = await User.findOne({username:username})
+        if(!user){
+          res.status(400).json(new Error('user not found'))
+        }
+        const isValid = await user.comparePassword(password, user.password)
+        if(!isValid) throw new Error()
+        res.status(200).json(user)
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json(new Error(error))
       }
       break
+      
     case 'POST':
     try{
       const widget = new Widget(req.body)

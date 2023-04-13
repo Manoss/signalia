@@ -1,17 +1,21 @@
 import { Component } from 'react'
-import React,{useEffect, useState} from 'react'
-//import ContentLoader from 'react-content-loader'
+import React,{useEffect, useState, forwardRef, useImperativeHandle} from 'react'
+import ContentLoader from 'react-content-loader'
 
 import SlideshowCard from './SlideshowCard'
 
 import { getSlideshows } from '../../lib/actions/slideshow'
 
-function SlideshowList(props) {
+const SlideshowList = forwardRef(function SlideshowList(props,ref) {
   const [slideshows, setSlideshows] = useState(null)
+
+  useImperativeHandle(ref, () => ({
+    refresh:refresh
+  }))
 
   useEffect(() => {
     refresh()
-  })
+  },[props])
   /**
   componentDidMount() {
     this.refresh()
@@ -41,9 +45,9 @@ function SlideshowList(props) {
         : Array(4)
             .fill()
             .map((index) => (
-              <div key={index} height={120} width={640}>
-                <rect x='0' y='0' rx='5' ry='5' width='100%' height='80' />
-              </div>
+              <ContentLoader key={index} height={120} width={640}>
+              <rect x='0' y='0' rx='5' ry='5' width='100%' height='100' />
+            </ContentLoader>
             ))}
       <style jsx>
         {`
@@ -54,7 +58,7 @@ function SlideshowList(props) {
       </style>
     </div>
   )
-}
+})
 
 
 export default SlideshowList

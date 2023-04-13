@@ -1,6 +1,6 @@
 import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
-//import axios from 'axios'
+import axios from 'axios'
 
 export const authOptions = {
   // Configure one or more authentication providers
@@ -11,7 +11,7 @@ export const authOptions = {
           password: {label:'Password', type: 'password'}
         },
         async authorize(credentials) {
-          //const user = await axios.post('http://localhost:3001/api/v1/users/signin',{username: credentials.username, password: credentials.password})
+          //const user = await axios.post('http://localhost:3000/api/v1/users/signin',{username: credentials.username, password: credentials.password})
           const user = {data : {username:'sainte-soline,',email:'sainte-soline@rip.fr',password:'democratie'}}
           console.log('AUTHORIZE : ', user.data)
           if(user.data.error){

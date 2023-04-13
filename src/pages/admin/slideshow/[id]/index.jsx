@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useRef, createRef} from 'react'
+
 //import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 //import { faPencilAlt } from '@fortawesome/free-solid-svg-icons'
 import _ from 'lodash'
@@ -20,7 +21,7 @@ import Stack from '@mui/material/Stack';
 //import Dialog from '../../../components/Dialog.js'
 import Dialog from '../../../../components/Dialog'
 
-//import { getSlideshow, updateSlideshow } from '../../../actions/slideshow'
+import { getSlideshow, updateSlideshow } from '../../../../lib/actions/slideshow'
 //import { display } from '../../../stores'
 import { useStateContext } from '@/lib/contexts/DisplayContext'
 
@@ -32,10 +33,10 @@ const updateSlideshowThrottled = _.debounce((id, data) => {
   return updateSlideshow(id, data)
 }, 300)
 
-function Slideshow(props) { 
+function Slideshow(props) {
   const { displayCtx, setDisplayCtx } = useStateContext();
   const dialog = createRef(null)
-  const [slideshow, setSlideshow] = useState(props.slideshow)
+  const [slideshow, setSlideshow] = useState()
   const slideList = createRef()
   const router = useRouter()
   const Session = useSession()
@@ -47,9 +48,16 @@ function Slideshow(props) {
     console.log('useEffect dialog : ', dialog.current)
     const displayId = displayCtx._id//router.query.display
     console.log('displayId : ', displayId)
+
     //display.setId(displayId)
 
-  })
+  },[dialog,displayCtx])
+
+  useEffect(() => {
+    const { id } = router.query
+    getSlideshow(id)
+    .then((res)  => setSlideshow(res))
+  },[router.query])
   /**
   componentDidMount() {
     //const { displayId } = this.props
@@ -58,22 +66,23 @@ function Slideshow(props) {
     display.setId(displayId)
   }
  */
-  const refresh = () => {
+  const refresh = async() => {
     
     console.debug('Refresh')
-    /** 
-    const { _id: id } = slideshow
     
+    //const { _id: id } = slideshow
+    const {id} = router.query 
     return getSlideshow(id).then(slideshow => {
-      setSlideshow({ slideshow }, () => {
-        slideList && slideList.current && slideList.current.refresh()
-      }) 
+      setSlideshow({ slideshow })
+      slideList && slideList.current && slideList.current.refresh() 
+
+      
       /**
       this.setState({ slideshow }, () => {
         slideList && slideList.current && slideList.current.refresh()
       })
-      
-    })*/
+      */
+    })
   }
 
   const openAddDialog = () => {
@@ -94,9 +103,9 @@ function Slideshow(props) {
             setSlideshow({
               ...slideshow,
               title
-            }, () => {
-              updateSlideshowThrottled(slideshow._id, { title })
-            } )
+            })
+            updateSlideshowThrottled(slideshow._id, { title })
+            
             /** 
             this.setState(
               {

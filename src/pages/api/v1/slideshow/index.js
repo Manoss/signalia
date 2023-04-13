@@ -23,7 +23,6 @@ export default async function handler(req, res) {
      */
     case 'GET' /* Get a model by its ID */:
       try {
-        //const { id } = req.params
         const slideshows = await Slideshow.find({})
         if (!slideshows) {
           res.status(400).json(new Error('Widget not found'))

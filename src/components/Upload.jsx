@@ -1,6 +1,4 @@
-import { Component } from 'react'
 import React, {createRef, useState} from 'react'
-import ContentLoader from 'react-content-loader'
 import dynamic from 'next/dynamic'
 
 import SlideEditDialog from './Admin/SlideEditDialog.jsx'
@@ -12,9 +10,7 @@ import { useTranslation } from 'next-i18next'
 const DropzoneWithNoSSR = dynamic(() => import('react-dropzone'), {
   ssr: false,
   loading: () => (
-    <ContentLoader height={120} width={640}>
-      <rect x='0' y='0' rx='5' ry='5' width='100%' height='100' />
-    </ContentLoader>
+    <p>Loading...</p>
   )
 })
 
@@ -54,7 +50,7 @@ function Upload(props) {
         ref={dialog}
       />
       <DropzoneWithNoSSR
-        accept='image/*'
+        accept={'image/*'} //Skipped "0" because it is not a valid MIME type. Check https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types for a list of valid MIME types.
         onDropAccepted={handleOnDropAccepted}
         onDropRejected={handleOnDropRejected}
         multiple={false}

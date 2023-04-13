@@ -23,7 +23,7 @@ function SlideshowCard(props) {
             <div
               className={'thumbnail'}
               style={{
-                // backgroundImage: `url(${value.data})`,
+                backgroundImage: `url(${value.data})`,
                 backgroundColor: 'gray'
               }}
             >

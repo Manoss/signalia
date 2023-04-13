@@ -17,6 +17,7 @@ import Icon from '@mui/material/Icon';
 import { addSlideshow } from '../../lib/actions/slideshow'
 
 //import { display } from '../stores'
+import { useStateContext } from '@/lib/contexts/DisplayContext'
 
 
 import { useRouter } from 'next/router.js'
@@ -24,6 +25,7 @@ import { useSession } from "next-auth/react"
 
 function Slideshows(props) {
   const slideshowList = createRef()
+  const { displayCtx, setDisplayCtx } = useStateContext();
   const Session = useSession()
   const router = useRouter()
   const { t } = useTranslation()

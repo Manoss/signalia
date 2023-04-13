@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
-//import ContentLoader from 'react-content-loader'
+import ContentLoader from 'react-content-loader'
 //import { SortableContainer, SortableElement } from 'react-sortable-hoc'
-//import arrayMove from 'array-move'
+import arrayMove from 'array-move'
 
 import SlideCard from './SlideCard'
 
@@ -10,13 +10,14 @@ import SlideCard from './SlideCard'
 
 //const SortableItem = SortableElement(SlideCard)
 
-/**
-const SortableList = SortableContainer(({ items, refresh }) => {
+
+//const SortableList = SortableContainer(({ items, refresh }) => {
+const SortableList = ({items, refresh}) => {
   return (
     <div className={'list'}>
       <div className={'timeline'} />
       {items.map((value, index) => (
-        <SortableItem
+        <div
           key={`item-${index}`}
           index={index}
           id={index}
@@ -44,14 +45,14 @@ const SortableList = SortableContainer(({ items, refresh }) => {
       </style>
     </div>
   )
-})
-*/
+}
+
 
 function SlideList(props) {
   const [slides,  setSlides] = useState(null)
 
   useEffect(()=>{
-    console.debug('useEffet Props : ', props)
+    console.debug('useEffet Props SlideList : ', props)
     const { slideshow } = props
     /** 
     getSlides(slideshow).then(slides => {
@@ -107,6 +108,7 @@ function SlideList(props) {
     Array(4)
       .fill()
       .map((i, index) => (
+        
         <div height={120} width={640} key={`loading-${index}`}>
           <rect x='0' y='0' rx='5' ry='5' width='100%' height='100' />
         </div>

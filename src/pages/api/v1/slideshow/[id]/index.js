@@ -13,14 +13,13 @@ export default async function handler(req, res) {
   switch (method) {
     case 'GET' /* Get a model by its ID */:
       try {
-        //const { id } = req.params
-        const display = await Display.findById(id).populate('widgets')
-        if (!display) {
-          res.status(400).json({ success: false })
+        const slideshow = await Slideshow.findById(id).populate('slides')
+        if (!slideshow) {
+          res.status(400).json(new Error('Slideshow not found'))
         }
-        res.status(200).json(display)
+        res.status(200).json(slideshow)
       } catch (error) {
-        res.status(400).json({ success: false })
+        res.status(400).json(new Error(error))
       }
       break
 
@@ -53,19 +52,17 @@ export default async function handler(req, res) {
       break
 
       case 'PATCH' /* Edit a model by its ID */:
-        console.log('PATCH')
         try {
-          const display = await Display.findById(id)
-          if(!display) {
-            res.status(400).json(new Error('Display not found'))
+          const slideshow = await Slideshow.findById(id)
+          if(!slideshow) {
+            res.status(400).json(new Error('Slideshow not found'))
           }
 
-          if ('name' in req.body) display.name = req.body.name
-          if ('layout' in req.body) display.layout = req.body.layout
-          if ('statusBar' in req.body) display.statusBar = req.body.statusBar
+          if ('title' in req.body) slideshow.title = req.body.title
           
           await display.save()
-          res.status(200).json(display)
+          await CommonHelper.broadcastUpdate(res.io)
+          res.status(200).json(slideshow)
         } catch (error) {
           res.status(400).json(new Error(error))
         }

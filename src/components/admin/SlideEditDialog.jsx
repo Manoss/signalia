@@ -1,25 +1,24 @@
-import React, {useEffect, useState, forwardRef, useImperativeHandle} from 'react'
+import {useEffect, useState, forwardRef, useImperativeHandle} from 'react'
 import _ from 'lodash'
 
 //import Dialog from '../Dialog'
 import { Input } from '../Form'
 
-//import { getSlide, addSlide, updateSlide } from '../../actions/slide'
+import { getSlide, addSlide, updateSlide } from '../../lib/actions/slide'
 
 // i18next
 import { useTranslation } from 'next-i18next'
 //import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { Button, Box, MenuItem, TextField, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
+import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
 const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
-  /** 
-  const [upload, setUpload] = React.useState(props.upload,
-    ...(props.upload ? { type: 'photo' } : {}))
-  */
+  
+  const [upload, setUpload] = useState(props.upload)
+
   const [state, setState] = useState({})
   const [dialog,setDialog] = useState(false)
-  const { data, title, description, duration, type = 'photo', upload } = state
+  const { data, title, description, duration, type = 'photo' } = state
   const { t } = useTranslation()
   const choices = [
     { id: 'youtube', label: 'Youtube Video' },
@@ -34,10 +33,13 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   }))
 
   useEffect(() => {
-    console.debug('useEffect')
-    console.debug('ref : ', ref, ' props : ', props)
+    console.debug('useEffect SlideEditDialog - ref : ', ref, ' props : ', props, ' upload : ', upload)
     //refresh()
   })
+
+  useEffect(() => {
+    setUpload(props.upload ? { type: 'photo' } : {})
+  },[props.upload])
 /**
   componentDidUpdate(prevProps) {
     if (this.props.upload != prevProps.upload) {
@@ -48,7 +50,7 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
     }
   }
 */
-  const refresh = () => {
+  const refresh = async() => {
     const { slide, upload } = props
     if (slide) {
     
@@ -105,6 +107,7 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   const save = () => {
     const { slide, slideshow } = props
     const { upload, ...otherProps } = state
+    console.log('Save Props : ',props, ' State : ', state, ' Upload : ', upload)
     if (slideshow) {
       /**
       return addSlide(slideshow, upload, _.pickBy(otherProps, v => v !== undefined)).then(() => {

@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react'
 import ColorPicker from './ColorPicker'
 import ContentLoader from 'react-content-loader'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 //MUI
 import {Typography, TextField, MenuItem} from '@mui/material';
 
@@ -127,11 +128,11 @@ function Input(props) {
                   <div className={'photo-upload'}>Drop a photo here...</div>
                 ) : (
                   <div className={'photo'}>
-                    <div
+                    <Image
                       className={'thumbnail'}
-                      style={{
-                        backgroundImage: `url(${value})`
-                      }}
+                      src={value}
+                      width='100'
+                      height='100'
                     />
                     <span className={'link'}>{value}</span>
                   </div>
