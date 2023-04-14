@@ -57,6 +57,7 @@ function Slideshow(props) {
     const { id } = router.query
     getSlideshow(id)
     .then((res)  => setSlideshow(res))
+    console.debug('useEffect slideshow : ', slideshow)
   },[router.query])
   /**
   componentDidMount() {
@@ -74,6 +75,7 @@ function Slideshow(props) {
     const {id} = router.query 
     return getSlideshow(id).then(slideshow => {
       setSlideshow({ slideshow })
+      console.log('Refresh slideshow : ', slideshow)
       slideList && slideList.current && slideList.current.refresh() 
 
       

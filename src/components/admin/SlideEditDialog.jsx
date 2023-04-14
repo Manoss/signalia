@@ -13,12 +13,10 @@ import { useTranslation } from 'next-i18next'
 import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
 const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
-  
-  const [upload, setUpload] = useState(props.upload)
 
   const [state, setState] = useState({})
   const [dialog,setDialog] = useState(false)
-  const { data, title, description, duration, type = 'photo' } = state
+  const { data, title, description, duration, type = 'photo', upload } = state
   const { t } = useTranslation()
   const choices = [
     { id: 'youtube', label: 'Youtube Video' },
@@ -33,12 +31,12 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   }))
 
   useEffect(() => {
-    console.debug('useEffect SlideEditDialog - ref : ', ref, ' props : ', props, ' upload : ', upload)
+    console.debug('useEffect SlideEditDialog - ref : ', ref, ' props : ', props, ' upload : ', upload, ' state : ', state)
     //refresh()
   })
-
+/*
   useEffect(() => {
-    setUpload(props.upload ? { type: 'photo' } : {})
+    setState(props.upload ? { type: 'photo' } : {})
   },[props.upload])
 /**
   componentDidUpdate(prevProps) {
