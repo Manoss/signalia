@@ -14,7 +14,7 @@ import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/
 
 const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
 
-  const [state, setState] = useState({})
+  const [state, setState] = useState({data: null, title:'', description:'', duration:5, type: 'photo', upload:props.upload })
   const [dialog,setDialog] = useState(false)
   const { data, title, description, duration, type = 'photo', upload } = state
   const { t } = useTranslation()
@@ -34,10 +34,14 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
     console.debug('useEffect SlideEditDialog - ref : ', ref, ' props : ', props, ' upload : ', upload, ' state : ', state)
     //refresh()
   })
-/*
+/**
   useEffect(() => {
-    setState(props.upload ? { type: 'photo' } : {})
+    setState( state => ({
+      ...state,
+      upload: props.upload ? { type: 'photo' } : {}
+    }))
   },[props.upload])
+  */
 /**
   componentDidUpdate(prevProps) {
     if (this.props.upload != prevProps.upload) {
