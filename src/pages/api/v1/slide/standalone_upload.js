@@ -10,8 +10,6 @@ const upload = multer({ dest: './public/uploads' });
  */
 
 export default async function handler(req, res) {
-
-      console.debug('standalon_upload : ', req)
       try {
         const middleware = upload.single('data')
 

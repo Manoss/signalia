@@ -32,17 +32,20 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
 
   useEffect(() => {
     console.debug('useEffect SlideEditDialog - ref : ', ref, ' props : ', props, ' upload : ', upload, ' state : ', state)
+    
     //refresh()
   })
-/**
+
   useEffect(() => {
+    console.log('useEffetct Props Diag : ', props.upload)
     setState( state => ({
       ...state,
-      upload: props.upload ? { type: 'photo' } : {}
+      upload: props.upload,
+      ...(props.upload ? { type: 'photo' } : {})
     }))
-  },[props.upload])
-  */
-/**
+  },[props])
+  
+/** 
   componentDidUpdate(prevProps) {
     if (this.props.upload != prevProps.upload) {
       this.setState({
@@ -69,7 +72,8 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
         })
       })
     } else {
-      setState({
+      setState(state => ({
+        ...state,
         data: undefined,
         title: undefined,
         description: undefined,
@@ -77,7 +81,7 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
         duration: undefined,
         upload,
         ...(upload ? { type: 'photo' } : {})
-      })
+      }))
       return Promise.resolve()
     }
   }
@@ -99,11 +103,12 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   }
 
   const handleChange = (name, value) => {
-    setState({
+    setState(state => ({
+      ...state,
       [name]: value,
       // Clean up data if the type of slide changed
       ...(name == 'type' ? { data: '' } : {})
-    })
+    }))
   }
 
   const save = () => {
@@ -111,11 +116,11 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
     const { upload, ...otherProps } = state
     console.log('Save Props : ',props, ' State : ', state, ' Upload : ', upload)
     if (slideshow) {
-      /**
+      
       return addSlide(slideshow, upload, _.pickBy(otherProps, v => v !== undefined)).then(() => {
         close()
-      })*/
-      close()
+      })
+      //close()
     } else {
       /**
       return updateSlide(slide, upload, _.pickBy(otherProps, v => v !== undefined)).then(() => {
@@ -126,7 +131,7 @@ const SlideEditDialog = forwardRef(function SlideEditDialog(props, ref) {
   }
 
   return (
-    <Dialog 
+    <Dialog
     sx={{
       '& .MuiTextField-root': { m: 1, width: '50ch' },
     }}
