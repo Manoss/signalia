@@ -5,7 +5,7 @@ import arrayMove from 'array-move'
 
 import SlideCard from './SlideCard'
 
-//import { getSlides } from '../../actions/slide'
+import { getSlides } from '../../lib/actions/slide'
 //import { reorderSlides } from '../../actions/slideshow'
 
 //const SortableItem = SortableElement(SlideCard)
@@ -54,12 +54,12 @@ function SlideList(props) {
   useEffect(()=>{
     console.debug('useEffet Props SlideList : ', props)
     const { slideshow } = props
-    /** 
+    
     getSlides(slideshow).then(slides => {
       setSlides(slides)
     })
-    */
-  })
+
+  },[])
 
   /**
   componentDidMount() {
@@ -88,7 +88,7 @@ function SlideList(props) {
     */
   }
 
-  const refresh = () => {
+  const refresh = async() => {
     const { slideshow } = props
     console.debug('Refresh SlideList ', slideshow)
     return getSlides(slideshow).then(slides => {

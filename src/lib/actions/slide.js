@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-export const getSlides = (slideshow, host = '') => {
+export const getSlides = async (slideshow, host = '') => {
   console.log('getSlides : ', slideshow)
   return axios.get(host + '/api/v1/slideshow/' + slideshow + '/slides').then(res => {
     if (res && res.data) {
@@ -9,7 +9,7 @@ export const getSlides = (slideshow, host = '') => {
   })
 }
 
-export const getSlide = (slide, host = '') => {
+export const getSlide = async(slide, host = '') => {
   return axios.get(host + '/api/v1/slide/' + slide).then(res => {
     if (res && res.data) {
       return res.data
@@ -17,11 +17,11 @@ export const getSlide = (slide, host = '') => {
   })
 }
 
-export const deleteSlide = (id, host = '') => {
+export const deleteSlide = async(id, host = '') => {
   return axios.delete(host + '/api/v1/slide/' + id)
 }
 
-export const updateSlide = (id, file, data, host = '') => {
+export const updateSlide = async(id, file, data, host = '') => {
   const formData = new FormData()
   for (const key of Object.keys(data)) {
     formData.append(key, data[key])
@@ -34,14 +34,14 @@ export const updateSlide = (id, file, data, host = '') => {
   })
 }
 
-export const addSlide = (slideshow, file, data, host = '') => {
+export const addSlide = async(slideshow, file, data, host = '') => {
   const formData = new FormData()
   for (const key of Object.keys(data)) {
     formData.append(key, data[key])
   }
   if (file) formData.append('data', file)
   formData.append('slideshow', slideshow)
-  return axios.post(host + '/api/v1/slide', formData, {
+  return axios.post(host + '/api/v1/slide/upload', formData, {
     headers: {
       'Content-Type': 'multipart/form-data'
     }

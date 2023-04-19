@@ -37,6 +37,7 @@ function Slideshow(props) {
   const { displayCtx, setDisplayCtx } = useStateContext();
   const dialog = createRef(null)
   const [slideshow, setSlideshow] = useState()
+  const [slideshowId, setSlideshowId] = useState(null)
   const slideList = createRef()
   const router = useRouter()
   const Session = useSession()
@@ -54,11 +55,20 @@ function Slideshow(props) {
   },[dialog,displayCtx])
 
   useEffect(() => {
+    console.debug('Get slideshow id')
+    const { id } = router.query
+    setSlideshowId(id)
+    console.log('Set Id slideshow : ', id)
+  },[router.query])
+
+  useEffect(() => {
     const { id } = router.query
     getSlideshow(id)
-    .then((res)  => setSlideshow(res))
-    console.debug('useEffect slideshow : ', slideshow)
-  },[router.query])
+    .then(slideshow  => {
+      setSlideshow({slideshow})
+      console.debug('useEffect slideshow : ', slideshow)
+    })
+  },[])
   /**
   componentDidMount() {
     //const { displayId } = this.props
@@ -67,6 +77,11 @@ function Slideshow(props) {
     display.setId(displayId)
   }
  */
+
+  const getSlideshowId = () => {
+    const { id } = router.query
+    console.log('Set Id slideshow : ', id)
+  }
   const refresh = async() => {
     
     console.debug('Refresh')
@@ -102,10 +117,10 @@ function Slideshow(props) {
           onChange={event => {
             const target = event.target
             const title = target && target.value
-            setSlideshow({
+            setSlideshow(slideshow => ({
               ...slideshow,
               title
-            })
+            }))
             updateSlideshowThrottled(slideshow._id, { title })
             
             /** 
