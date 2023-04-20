@@ -1,12 +1,20 @@
 import axios from 'axios'
 
-export const getSlides = async (slideshow, host = '') => {
+export const getSlides = async(slideshow, host = '') => {
   console.log('getSlides : ', slideshow)
+  const res = await axios.get(host + '/api/v1/slideshow/' + slideshow + '/slides')
+  console.log('RES : ', res)
+  if (res && res.data) {
+    return res.data
+  }
+  return res
+
+  /**
   return axios.get(host + '/api/v1/slideshow/' + slideshow + '/slides').then(res => {
     if (res && res.data) {
       return res.data
     }
-  })
+  })*/
 }
 
 export const getSlide = async(slide, host = '') => {

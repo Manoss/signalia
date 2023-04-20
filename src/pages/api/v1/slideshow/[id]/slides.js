@@ -16,9 +16,11 @@ export default async function handler(req, res) {
 
   switch (method) {
     case 'GET' /* Get a model by its ID */:
-        console.debug('GET slides :', id, req)
+        console.debug('GET slides :', id)
       try {
+        console.log('Before SlideSHOW : ',slideshow)
         const slideshow = await Slideshow.findById(id).populate('slides')
+        console.log('SlideSHOW : ',slideshow)
         if (!slideshow) {
           res.status(400).json(new Error('Slideshow not found'))
         }

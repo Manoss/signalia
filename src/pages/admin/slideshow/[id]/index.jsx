@@ -37,7 +37,7 @@ function Slideshow(props) {
   const { displayCtx, setDisplayCtx } = useStateContext();
   const dialog = createRef(null)
   const [slideshow, setSlideshow] = useState()
-  const [slideshowId, setSlideshowId] = useState(null)
+  const [id, setId] = useState(null)
   const slideList = createRef()
   const router = useRouter()
   const Session = useSession()
@@ -48,27 +48,23 @@ function Slideshow(props) {
   useEffect(() => {
     console.log('useEffect dialog : ', dialog.current)
     const displayId = displayCtx._id//router.query.display
-    console.log('displayId : ', displayId)
+    console.log('displayId : ', displayId, 'Props : ', props, ' Id : ',id)
 
     //display.setId(displayId)
 
   },[dialog,displayCtx])
 
   useEffect(() => {
-    console.debug('Get slideshow id')
-    const { id } = router.query
-    setSlideshowId(id)
+    const {id} = router.query
+    setId(id)
     console.log('Set Id slideshow : ', id)
-  },[router.query])
 
-  useEffect(() => {
-    const { id } = router.query
-    getSlideshow(id)
-    .then(slideshow  => {
-      setSlideshow({slideshow})
-      console.debug('useEffect slideshow : ', slideshow)
+    getSlideshow(id).then(slideshow => {
+      setSlideshow(slideshow)
     })
-  },[])
+
+  },[router.query, id])
+
   /**
   componentDidMount() {
     //const { displayId } = this.props
@@ -78,16 +74,11 @@ function Slideshow(props) {
   }
  */
 
-  const getSlideshowId = () => {
-    const { id } = router.query
-    console.log('Set Id slideshow : ', id)
-  }
   const refresh = async() => {
     
     console.debug('Refresh')
     
     //const { _id: id } = slideshow
-    const {id} = router.query 
     return getSlideshow(id).then(slideshow => {
       setSlideshow({ slideshow })
       console.log('Refresh slideshow : ', slideshow)
@@ -149,7 +140,7 @@ function Slideshow(props) {
       
       <div className='wrapper'>
         <Stack spacing={2}>
-          <Upload slideshow={slideshow && slideshow._id} refresh={refresh} />
+          <Upload slideshow={slideshow && slideshow?._id} refresh={refresh} />
           <SlideEditDialog
             slideshow={slideshow && slideshow._id}
             refresh={refresh}

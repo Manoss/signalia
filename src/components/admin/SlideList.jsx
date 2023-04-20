@@ -97,7 +97,7 @@ function SlideList(props) {
   }
 
   return slides ? (
-    <SlideCard
+    <SortableList
       items={slides}
       refresh={refresh}
       onSortEnd={onSortEnd}
